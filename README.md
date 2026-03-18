@@ -1,11 +1,11 @@
-# 🏥 SWAYAMSEM: Self-Validating AI for Medical Semantics
+# 🏥 NeuroVision AI: Multi-Modal Medical Diagnostics
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-orange.svg)](https://pytorch.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-REST%20API-green.svg)](https://fastapi.tiangolo.com/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Web%20UI-red.svg)](https://streamlit.io/)
 
-**SWAYAMSEM** is a comprehensive, multi-modal Medical AI classification system that orchestrates multiple state-of-the-art vision and language models for advanced medical image and text report analysis. 
+**NeuroVision AI** is a comprehensive, multi-modal Medical AI classification system that orchestrates multiple state-of-the-art vision and language models for advanced medical image and text report analysis. 
 
 The system implements **modality-specific pipelines** for **Chest X-ray, Bone X-ray, Brain MRI, and Text Reports**, providing automated disease classification, verification, and professional radiology-style report generation.
 
