@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/report-style.css">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="navbar">
+        <b>
+            <h1 class="logo" color="white">MedAI</h1>
+        </b>
+        <ul class="nav-menu">
+            <!-- <li><a href="home.html" class="nav-link">Home</a></li> -->
+            <li><a href="home" class="nav-link">Home</a></li>
+            <!-- <li><a href="about" class="nav-link">About Us</a></li> -->
+            <li><a href="about" class="nav-link">About Us</a></li>
+            <button id="logoutButton" class="nav-link"><span></span>LogOut</button>
+        </ul>
+        <div class="hamburger">
+            <label class="bar"></label>
+            <label class="bar"></label>
+            <label class="bar"></label>
+        </div>
+    </div>
+    <div class="bannar">
+        <h1>MRI Brain</h1>
+        <div class="report-body">
+            <h2>Meningioma</h2>
+            <div class="report-desc">
+                <!-- <ul>
+                    <li>
+                        
+                    </li>
+                </ul> -->
+
+
+                <div class="report_info">
+                    <h3>Patient Information:</h3>
+                    <p><strong>Paotent Id:</strong> <span >{{pId}}</span></p>
+                    <p><strong>Name:</strong> <span >{{name}}</span></p>
+                    <p><strong>Age:</strong> <span >{{age}}</span></p>
+                    <p><strong>Sex:</strong> <span >{{gender}}</span></p>
+
+                    <h3>Findings:</h3>
+                    <p>A brain MRI was performed on [date] to evaluate [patient's symptoms or clinical indication]. The
+                        study demonstrates the presence of a glioma in the [specific location of the brain] with the
+                        following characteristics:</p>
+
+                    <ul>
+                        <li><strong>Location:</strong> The glioma is located in the [specific brain region],
+                            approximately [distance] from [anatomical landmarks].</li>
+                        <li><strong>Size:</strong> The maximum dimensions of the tumor are approximately [size] (length)
+                            x [size] (width) x [size] (height).</li>
+                        <li><strong>Shape:</strong> The glioma exhibits [well-defined or infiltrative] margins.</li>
+                        <li><strong>Enhancement:</strong> There is [presence or absence] of contrast enhancement within
+                            the tumor, suggesting [pattern of enhancement].</li>
+                        <li><strong>Peritumoral Edema:</strong> Surrounding peritumoral edema is noted, contributing to
+                            [clinical findings].</li>
+                        <li><strong>Mass Effect:</strong> The tumor exerts a mass effect on adjacent structures, leading
+                            to [related findings].</li>
+                        <li><strong>Hemorrhage or Necrosis:</strong> [Presence or absence] of areas of hemorrhage or
+                            necrosis within the glioma.</li>
+                        <li><strong>Perfusion:</strong> [Perfusion parameters if measured] within and around the glioma.
+                        </li>
+                    </ul>
+
+                    <h3>Impression:</h3>
+                    <p>MRI findings are highly suggestive of a glioma in the [specific location]. Further diagnostic and
+                        therapeutic steps, such as biopsy, grading, or consultation with an oncologist or neurosurgeon,
+                        are warranted.</p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <button id="saveButton" class="save-btn" onclick="saveAsImage()">Save</button>
+</body>
+<script>
+    const fname = localStorage.getItem("fname");
+    const lname = localStorage.getItem("lname");
+    const fullname = fname + " " + lname;
+    const age = localStorage.getItem("age");
+
+    if (fullname) {
+        document.getElementById('name').textContent = fullname;
+    }
+    if (age) {
+        document.getElementById('age').textContent = age;
+    }
+    const gender = localStorage.getItem('gender');
+    if(gender){
+        document.getElementById('Gender').textContent = gender;x
+    }
+
+    function saveAsImage() {
+        // Get the div element to capture
+        const bannarDiv = document.querySelector('.bannar');
+
+        // Use html2canvas to capture the div as an image
+        html2canvas(bannarDiv).then(canvas => {
+            // Convert the canvas to a data URL
+            const dataURL = canvas.toDataURL('image/png');
+
+            // Create a link to download the image
+            const downloadLink = document.createElement('a');
+            downloadLink.href = dataURL;
+            downloadLink.download = 'report.png';
+            downloadLink.click();
+        });
+    }
+
+
+
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-analytics.js";
+    import { getDatabase } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js"
+    import { getAuth, createUserWithEmailAndPassword, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"
+    import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyCS7AhJYRbHHoU9DIQ1kHEw9EY74s4b9nE",
+        authDomain: "medai-5fc25.firebaseapp.com",
+        databaseURL: "https://medai-5fc25-default-rtdb.firebaseio.com/",
+        projectId: "medai-5fc25",
+        storageBucket: "medai-5fc25.firebasestorage.app",
+        messagingSenderId: "956358979288",
+        appId: "1:956358979288:web:7793a2ee96308785e071ad",
+        measurementId: "G-WBF07MKJZM"
+    };
+
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);
+
+    const auth = getAuth();
+    const logoutButton = document.getElementById('logoutButton');
+
+    logoutButton.addEventListener('click', () => {
+        signOut(auth)
+            .then(() => {
+                // Sign out successful
+                // window.location.href = "login"; // Redirect to login page
+                window.location.href = "login"; // Redirect to login page
+            })
+            .catch((error) => {
+                // An error occurred during sign out
+                console.error(error);
+            });
+    });
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            // User is not logged in
+            // window.location.href = "login"; // Redirect to login page
+            window.location.href = "login"; // Redirect to login page
+        }
+    });
+</script>
+
+</html>

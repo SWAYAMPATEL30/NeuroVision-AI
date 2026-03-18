@@ -1,0 +1,65 @@
+# Models
+models/
+*.pth
+*.pt
+*.ckpt
+*.h5
+*.pb
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints
+
+# Medical data (privacy)
+*.dcm
+*.dicom
+medical_images/
+patient_data/
+
+# Logs
+*.log
+
+
+
+
+
+# Archives
+*.zip
+
+# Analysis
+analysis_outputs/

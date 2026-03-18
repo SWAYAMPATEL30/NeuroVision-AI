@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css?family=Exo:400,700');
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Exo', sans-serif;
+}
+body{
+    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('process-bg.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+.navbar{
+    width: 85%;
+    display: flex;
+    align-items: center;
+    padding: 35px 0;
+    margin: auto;
+    justify-content: space-between;
+}
+.logo{
+    color: White;
+    cursor: pointer;
+    font-size: 30px;
+}
+.navbar ul li{
+    list-style: none;
+    display: inline-block;
+    margin: 0 25px;
+    position: relative;
+}
+.navbar ul li a{
+    text-decoration: none;
+    color: white;
+    text-transform: uppercase   ;
+    
+}
+.navbar ul li::after{
+    content: '';
+    width: 0;
+    height: 3px;
+    background: rgb(0,184,231);
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    transition: 0.5s;
+}
+.navbar ul li:hover::after{
+    width: 100%;
+}
+.hamburger{
+    display: none;
+    cursor: pointer;
+}
+.bar{
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    background-color: white;
+}
+#logoutButton{
+    width: 200px;
+    padding: 10px 15px;
+    border: 2px solid  rgb(0,184,231);
+    border-radius: 30px;
+    background: transparent;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+.bannar{
+    margin-left: 15%;
+    margin-top: 10px;
+    width: 70%;
+    padding: 30px 0 30px 0;
+    background-color: white;
+    border-radius: 30px;
+}
+.bannar h1{
+    text-align: center;
+    padding-top: 20px;
+}
+.bannar .report-img{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+.bannar img{
+    width: 300px;
+    align-items: center;
+    transition: 0.5s ease;
+}
+.bannar img:hover{
+    transform: scale(1.02);
+}
+.report-body h2{
+    text-align: center;
+    margin-top: 20px;
+
+}
+
+.report-body .report-desc{
+    margin-top: 30px;
+    margin-left: 70px;
+    margin-right: 30px;
+}
+.report-body .report-desc .patient_info_div{
+    margin: 10px 0 15px 0;
+}
+.report-body .report-desc .report_info .report_info_heading{
+    margin: 10px 0 5px 0;   
+}
+.report-body .report-desc .report_info p, ul li{
+    margin-left: 40px;
+    margin-bottom: 10px;
+}
+.save-btn{
+    margin-left: 45%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 200px;
+    height: 40px;
+    background-color: transparent;
+    color: white;
+    border: 2px solid rgb(0,184,231);
+    border-radius: 20px;
+    transition: 0.5s ease;
+}
+.save-btn:hover{
+    background-color: rgb(0,184,231);
+    color: white;
+    font-weight: 800;
+}
