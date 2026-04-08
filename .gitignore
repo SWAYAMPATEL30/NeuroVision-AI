@@ -56,10 +56,103 @@ patient_data/
 
 
 
+# Models
+models/
+*.pth
+*.pt
+*.ckpt
+*.h5
+*.pb
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# Archives
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints
+
+# Medical data (privacy)
+*.dcm
+*.dicom
+medical_images/
+patient_data/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Sensitive Keys
+openai_key.txt
+gemini_key.txt
+groq_key.txt
+
+# Large Files & Archives
 *.zip
+*.rar
+*.7z
+*.h5
+*.h5.zip
+major_project-main/
+hf_models/
+Results_Final/
+temp_unzip/
+*.pdf
+*.log
+api_log.txt
+err_log.txt
+error_log.txt
+error_log2.txt
+output_keras.txt
+push_out.txt
+model_test_output.txt
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
 
 # Analysis
 analysis_outputs/

@@ -5,6 +5,22 @@ Integrates multiple models for comprehensive medical image and report analysis
 
 import os
 import sys
+
+# ── Auto-load .env (no need to set tokens in terminal) ───────────────────────
+_ENV_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+try:
+    from dotenv import load_dotenv
+    load_dotenv(_ENV_FILE, override=True)
+except ImportError:
+    if os.path.exists(_ENV_FILE):
+        with open(_ENV_FILE) as _ef:
+            for _line in _ef:
+                _line = _line.strip()
+                if _line and not _line.startswith("#") and "=" in _line:
+                    _k, _v = _line.split("=", 1)
+                    os.environ.setdefault(_k.strip(), _v.strip())
+# ─────────────────────────────────────────────────────────────────────────────
+
 import torch
 import numpy as np
 from PIL import Image
@@ -15,7 +31,6 @@ import json
 # Fix encoding issues on Windows
 if sys.platform == 'win32':
     import io
-    # Set UTF-8 encoding for stdout/stderr
     if sys.stdout.encoding != 'utf-8':
         sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
     if sys.stderr.encoding != 'utf-8':
@@ -32,7 +47,7 @@ from transformers import (
 )
 from huggingface_hub import login, hf_hub_download
 
-# Groq API for Gemini
+# Groq API for report generation
 try:
     from groq import Groq
 except ImportError:
@@ -42,18 +57,33 @@ except ImportError:
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
-# Hugging Face token
+# API Tokens — loaded from .env automatically
 HF_TOKEN = os.getenv("HF_TOKEN")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-# Login to Hugging Face (with error handling)
+# Local model cache — use project-local directory if available, else HF default
+_LOCAL_CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "hf_models")
+_HF_DEFAULT_CACHE = os.path.expanduser("~/.cache/huggingface/hub")
+# Use local project cache if it exists and has models, otherwise HF default
+if os.path.exists(_LOCAL_CACHE) and os.listdir(_LOCAL_CACHE):
+    DEFAULT_CACHE_DIR = _LOCAL_CACHE
+    print(f"[Models] Using local project cache: {DEFAULT_CACHE_DIR}")
+else:
+    DEFAULT_CACHE_DIR = _HF_DEFAULT_CACHE
+    print(f"[Models] Using HuggingFace default cache: {DEFAULT_CACHE_DIR}")
+
+# Login to Hugging Face
 try:
-    login(token=HF_TOKEN)
-    print("Hugging Face authentication successful")
+    if HF_TOKEN:
+        login(token=HF_TOKEN)
+        print("Hugging Face authentication successful")
+    else:
+        print("Warning: No HF_TOKEN found in .env — some gated models may not load")
 except Exception as e:
     print(f"Warning: Hugging Face authentication failed: {e}")
-    print("  Some models may require authentication. Continuing anyway...")
-    HF_TOKEN = None  # Set to None if login fails
+    HF_TOKEN = None
+
 
 class MedicalClassifier:
     """Unified medical classification system using multiple models"""
@@ -115,11 +145,14 @@ class MedicalClassifier:
     
     def _load_models(self):
         """Load all medical models with persistent caching"""
-        import os
-        # Set cache directory for all models (download once, reuse)
-        cache_dir = os.path.expanduser("~/.cache/huggingface/hub")
+        # Use the cache directory set at module level (local project dir preferred)
+        cache_dir = DEFAULT_CACHE_DIR
         print(f"Using model cache directory: {cache_dir}")
-        print("Models will be downloaded once and cached for future use.")
+        if cache_dir == _LOCAL_CACHE:
+            print("✅ Loading from LOCAL project directory (no internet needed)")
+        else:
+            print("Models will be downloaded once and cached for future use.")
+            print("  💡 Run: python download_models.py to cache models locally in this project")
         
         # 1. MedSigLIP - General medical image-text model
         try:
@@ -312,7 +345,7 @@ class MedicalClassifier:
     def _load_medgemma(self):
         """Load MedGemma-27b-it as primary medical model with caching"""
         import os
-        cache_dir = os.path.expanduser("~/.cache/huggingface/hub")
+        cache_dir = r"C:\Users\ipate\OneDrive\Documents\try\hf_models"  # LOCAL CACHE — set by download_models.py
         
         try:
             model_id = "google/medgemma-27b-it"
@@ -1246,139 +1279,48 @@ class MedicalClassifier:
         use_best_model_only: bool = False,
         best_model_info: Optional[Dict] = None
     ) -> str:
-        """Generate radiologist report using Gemini via Groq"""
-        if self.groq_client is None:
-            return "Groq API not available. Please check your API key."
+        """Generate radiologist report using Google Gemini API (Sync)"""
+        if not GEMINI_API_KEY:
+            return "Gemini API key not found. Please check your .env file."
         
         try:
-            # Prepare prompt - use only best model if specified
-            if use_best_model_only and best_model_info:
-                prompt = f"You are a medical radiologist. Analyze the following medical findings from the BEST AI model ({best_model_info.get('model', 'AI Model')}) and generate a professional radiology report.\n\n"
-                prompt += f"BEST MODEL SELECTED: {best_model_info.get('model', 'AI Model')} (Highest Confidence)\n"
-                prompt += f"PRIMARY FINDING: {best_model_info.get('disease', 'N/A')} ({best_model_info.get('confidence', 0):.1%} confidence)\n\n"
-            else:
-                prompt = "You are a medical radiologist. Analyze the following medical findings from AI models and generate a professional radiology report.\n\n"
+            import httpx
+            # Prepare prompt
+            prompt = "You are a board-certified radiologist. Generate a professional medical report based on the following AI analysis:\n\n"
             
-            if analysis_results:
-                # Format model results (only best model if use_best_model_only is True)
-                formatted_results = []
-                
-                # MedSigLIP results
-                if "medsiglip" in analysis_results and "error" not in analysis_results["medsiglip"]:
-                    medsiglip = analysis_results["medsiglip"]
-                    if "top_prediction" in medsiglip:
-                        pred_text = f"MedSigLIP (General Detection): {medsiglip['top_prediction']}"
-                        if "predictions" in medsiglip and medsiglip["top_prediction"] in medsiglip["predictions"]:
-                            conf = medsiglip["predictions"][medsiglip["top_prediction"]]
-                            pred_text += f" (Confidence: {conf:.1%})"
-                        formatted_results.append(pred_text)
-                        # Add top 3 predictions
-                        if "predictions" in medsiglip:
-                            sorted_preds = sorted(medsiglip["predictions"].items(), key=lambda x: x[1], reverse=True)[:3]
-                            pred_list = ", ".join([f"{d} ({s:.1%})" for d, s in sorted_preds])
-                            formatted_results.append(f"  Top predictions: {pred_list}")
-                
-                # CheXpert results (most reliable)
-                if "chexpert" in analysis_results and "error" not in analysis_results["chexpert"]:
-                    chexpert = analysis_results["chexpert"]
-                    if "top_predictions" in chexpert:
-                        pred_list = []
-                        for disease, score in list(chexpert["top_predictions"].items())[:5]:
-                            pred_list.append(f"{disease} ({score:.1%})")
-                        formatted_results.append(f"CheXpert DenseNet (High Accuracy): {', '.join(pred_list)}")
-                
-                # CXR Foundation results
-                if "cxr" in analysis_results and "error" not in analysis_results["cxr"]:
-                    cxr = analysis_results["cxr"]
-                    if "top_predictions" in cxr:
-                        pred_list = []
-                        for disease, score in list(cxr["top_predictions"].items())[:3]:
-                            pred_list.append(f"{disease} ({score:.1%})")
-                        formatted_results.append(f"CXR Foundation (Chest Specialized): {', '.join(pred_list)}")
-                
-                if formatted_results:
-                    if use_best_model_only:
-                        prompt += "MODEL ANALYSIS RESULTS (Best Model Only):\n"
-                    else:
-                        prompt += "MODEL ANALYSIS RESULTS:\n"
-                    prompt += "\n".join(formatted_results) + "\n\n"
-                    
-                    if not use_best_model_only:
-                        # Get best prediction
-                        best = self.get_best_model_prediction(analysis_results)
-                        if best["disease"]:
-                            prompt += f"PRIMARY FINDING (Highest Confidence): {best['disease']} ({best['confidence']:.1%} confidence from {best['model']})\n\n"
+            if best_model_info:
+                prompt += f"PRIMARY FINDING: {best_model_info.get('disease', 'N/A')} ({best_model_info.get('confidence', 0):.1%} confidence)\n"
+                prompt += f"MODEL USED: {best_model_info.get('model', 'Synapse AI')}\n\n"
             
             if text_input:
-                prompt += f"CLINICAL HISTORY/REPORT:\n{text_input}\n\n"
-            
-            prompt += "Generate a professional radiology report with the following structure:\n"
-            prompt += "1. CLINICAL INDICATION: Based on the clinical history provided above\n"
-            prompt += "2. FINDINGS: Describe findings based on ALL model predictions above. Include:\n"
-            prompt += "   - Primary finding (highest confidence prediction)\n"
-            prompt += "   - Secondary findings from other models\n"
-            prompt += "   - Confidence levels for each finding\n"
-            prompt += "3. IMPRESSION: Summary diagnosis based on ALL model consensus. Use the PRIMARY FINDING as the main diagnosis.\n"
-            prompt += "4. RECOMMENDATIONS: Clinical recommendations\n\n"
-            prompt += "CRITICAL INSTRUCTIONS:\n"
-            prompt += "- Use ONLY the diseases that appear in the model results above\n"
-            prompt += "- Do NOT invent or assume diseases (especially do NOT default to tuberculosis)\n"
-            prompt += "- If models show 'No Finding' or 'normal', state that clearly\n"
-            prompt += "- Report the PRIMARY FINDING as the main diagnosis\n"
-            prompt += "- Include confidence levels in your findings\n\n"
-            prompt += "RADIOLOGY REPORT:"
-            
-            # Use Groq API with available model
-            # Try different models in order of preference
-            models_to_try = [
-                "llama-3.3-70b-versatile",
-                "llama-3.1-8b-instant",
-                "llama-3.1-70b-versatile",
-                "mixtral-8x7b-32768"
-            ]
-            
-            chat_completion = None
-            last_error = None
-            
-            for model_name in models_to_try:
-                try:
-                    chat_completion = self.groq_client.chat.completions.create(
-                        messages=[
-                            {
-                                "role": "system",
-                                "content": "You are an expert medical radiologist with years of experience in interpreting medical images and reports. Always provide accurate, professional medical reports."
-                            },
-                            {
-                                "role": "user",
-                                "content": prompt
-                            }
-                        ],
-                        model=model_name,
-                        temperature=0.3,
-                        max_tokens=1500
-                    )
-                    break  # Success, exit loop
-                except Exception as e:
-                    last_error = e
-                    continue
-            
-            if chat_completion is None:
-                raise Exception(f"All models failed. Last error: {last_error}")
-            
-            report = chat_completion.choices[0].message.content
-            return report
-            
+                prompt += f"CLINICAL HISTORY: {text_input}\n\n"
+
+            prompt += """Generate a structured report with:
+1. PATIENT DEMOGRAPHICS
+2. CLINICAL INDICATION
+3. TECHNIQUE
+4. FINDINGS
+5. IMPRESSION
+6. RECOMMENDATIONS
+
+Use professional medical terminology."""
+
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+            payload = {
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {"temperature": 0.4, "maxOutputTokens": 1000}
+            }
+
+            with httpx.Client() as client:
+                resp = client.post(url, json=payload, timeout=30.0)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    return data['candidates'][0]['content']['parts'][0]['text']
+                else:
+                    return f"Gemini API error ({resp.status_code})."
+
         except Exception as e:
-            # Fallback: try with Google Generative AI if available
-            try:
-                import google.generativeai as genai
-                # Note: This would need actual Gemini API key, not Groq key
-                # genai.configure(api_key=YOUR_GEMINI_API_KEY)
-                
-                # For now, return error message
-                return f"Groq API error: {str(e)}\n\nTo use Gemini directly, configure google-generativeai with a Gemini API key."
-            except Exception as e2:
-                return f"Failed to generate report: {str(e)}"
+            return f"Medical Report Generation failed: {str(e)}"
     
     def extract_diseases_from_text(self, text: str) -> Dict:
         """Extract diseases mentioned in medical text using comprehensive database"""
@@ -1420,7 +1362,8 @@ class MedicalClassifier:
         image_path: Optional[Union[str, Image.Image]] = None,
         report_text: Optional[str] = None,
         generate_report: bool = True,
-        use_comprehensive: bool = True
+        use_comprehensive: bool = True,
+        fast_mode: bool = False
     ) -> Dict:
         """
         Main classification function
@@ -1429,6 +1372,8 @@ class MedicalClassifier:
             image_path: Path to medical image or PIL Image object
             report_text: Medical report text (optional)
             generate_report: Whether to generate a radiologist report
+            use_comprehensive: Whether to use MedSigLIP's full disease database
+            fast_mode: If True, skip heavy models like MedGemma and use light models only.
         
         Returns:
             Dictionary with classification results
@@ -1690,7 +1635,8 @@ class MedicalClassifier:
     def classify_chest_xray(
         self,
         image_path: Union[str, Image.Image],
-        generate_report: bool = True
+        generate_report: bool = True,
+        fast_mode: bool = False
     ) -> Dict:
         """
         Specialized classification for chest X-rays
@@ -1711,7 +1657,7 @@ class MedicalClassifier:
         results["classifications"]["custom_chest"] = custom_result
 
         # 1. MedGemma (optional - Highest Accuracy, slow)
-        if self.models.get('medgemma') is not None or self.medgemma_pipeline is not None:
+        if not fast_mode and (self.models.get('medgemma') is not None or self.medgemma_pipeline is not None):
             print("\nRunning MedGemma-27b-it (Primary for Chest X-Ray)...")
             medgemma_result = self.classify_with_medgemma(image=image, text_input="Analyze this chest X-ray for pulmonary and cardiac findings.")
             results["classifications"]["medgemma"] = medgemma_result
@@ -1776,7 +1722,8 @@ class MedicalClassifier:
     def classify_bone_xray(
         self,
         image_path: Union[str, Image.Image],
-        generate_report: bool = True
+        generate_report: bool = True,
+        fast_mode: bool = False
     ) -> Dict:
         """
         Specialized classification for bone X-rays with fracture detection priority
@@ -1818,7 +1765,7 @@ class MedicalClassifier:
         results["classifications"]["medsiglip"] = medsiglip_result
         
         # 2. MedGemma (Secondary - High accuracy but slower)
-        if self.models.get('medgemma') is not None or self.medgemma_pipeline is not None:
+        if not fast_mode and (self.models.get('medgemma') is not None or self.medgemma_pipeline is not None):
             print("Running MedGemma-27b-it (Secondary for Bone X-Ray)...")
             medgemma_result = self.classify_with_medgemma(
                 image=image, 
@@ -1871,7 +1818,8 @@ class MedicalClassifier:
     def classify_brain_tumor(
         self,
         image_path: Union[str, Image.Image],
-        generate_report: bool = True
+        generate_report: bool = True,
+        fast_mode: bool = False
     ) -> Dict:
         """
         Specialized classification for brain tumor MRI images
@@ -1970,7 +1918,7 @@ class MedicalClassifier:
         results["classifications"]["medsiglip"] = medsiglip_result
         
         # 3. MedGemma (Tertiary - High accuracy analysis)
-        if self.models.get('medgemma') is not None or self.medgemma_pipeline is not None:
+        if not fast_mode and (self.models.get('medgemma') is not None or self.medgemma_pipeline is not None):
             print("Running MedGemma-27b-it (Tertiary for Brain Tumor)...")
             medgemma_result = self.classify_with_medgemma(
                 image=image,
@@ -2047,7 +1995,8 @@ class MedicalClassifier:
     def classify_text_report(
         self,
         report_text: str,
-        generate_report: bool = True
+        generate_report: bool = True,
+        fast_mode: bool = False
     ) -> Dict:
         """
         Classify text report with automatic model loading
@@ -2069,7 +2018,7 @@ class MedicalClassifier:
         print(f"Found {text_diseases.get('total_found', 0)} diseases in text")
         
         # 2. MedGemma (Secondary - Text analysis)
-        if self.models.get('medgemma') is not None or self.medgemma_pipeline is not None:
+        if not fast_mode and (self.models.get('medgemma') is not None or self.medgemma_pipeline is not None):
             print("Running MedGemma-27b-it (Secondary for Text Analysis)...")
             medgemma_result = self.classify_with_medgemma(
                 image=None,

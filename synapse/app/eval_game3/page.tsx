@@ -1,0 +1,172 @@
+"use client";
+
+import React, { useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+
+type Choice = 0 | 1 | 2 | 3;
+
+const gad7Questions: string[] = [
+  "Feeling nervous, anxious, or on edge",
+  "Not being able to stop or control worrying",
+  "Worrying too much about different things",
+  "Trouble relaxing",
+  "Being so restless that it is hard to sit still",
+  "Becoming easily annoyed or irritable",
+  "Feeling afraid, as if something awful might happen",
+];
+
+const choices = [
+  { label: "Not at all", value: 0 },
+  { label: "Several days", value: 1 },
+  { label: "More than half the days", value: 2 },
+  { label: "Nearly every day", value: 3 },
+] as const;
+
+function severityFromScore(total: number): string {
+  if (total <= 4) return "Minimal";
+  if (total <= 9) return "Mild";
+  if (total <= 14) return "Moderate";
+  return "Severe";
+}
+
+export default function GAD7Onboarding() {
+  const [answers, setAnswers] = useState<Record<number, Choice>>({});
+  const [submitted, setSubmitted] = useState(false);
+
+  const total = useMemo(
+    () => Object.values(answers).reduce<number>((sum, v) => sum + (v ?? 0), 0),
+    [answers]
+  );
+
+  const allAnswered = gad7Questions.every((_, idx) => answers[idx] !== undefined);
+
+  function selectAnswer(qIndex: number, value: Choice) {
+    setAnswers((prev) => ({ ...prev, [qIndex]: value }));
+  }
+
+  function handleSubmit() {
+    if (!allAnswered) return;
+    try {
+      const severity = severityFromScore(total);
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem(
+          "synapse_gad7",
+          JSON.stringify({ score: total, severity, at: Date.now() })
+        );
+      }
+    } catch {}
+    setSubmitted(true);
+  }
+
+  if (submitted) {
+    const severity = severityFromScore(total);
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-sky-50 to-white flex items-center justify-center p-4">
+        <Card className="w-full max-w-3xl p-8 bg-white border border-emerald-100 text-slate-800 rounded-2xl shadow-md">
+          <div className="grid md:grid-cols-2 gap-6 items-start">
+            <div>
+              <h1 className="text-3xl font-bold mb-4">GAD‑7 Summary</h1>
+              <div className="space-y-2 mb-6">
+                <div className="text-slate-600">Total score</div>
+                <div className="text-5xl font-extrabold text-slate-900">{total}</div>
+                <div className="text-slate-700">Severity: <span className="font-semibold">{severity}</span></div>
+              </div>
+            </div>
+            <div className="flex flex-col justify-between">
+              <div className="text-sm text-slate-600 mb-6">
+                This screening helps tailor your onboarding. It is not a diagnosis.
+              </div>
+              <div className="flex gap-3">
+                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => setSubmitted(false)}>Edit answers</Button>
+                <a href="/dashboard/voice" className="inline-flex">
+                  <Button className="bg-sky-600 hover:bg-sky-700 text-white">Continue</Button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-sky-50 to-white text-slate-900 p-4">
+      <div className="max-w-6xl mx-auto py-10">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-slate-900">GAD‑7 Onboarding</h1>
+        <p className="text-slate-600 mb-6">Over the last 2 weeks, how often have you been bothered by the following problems?</p>
+
+        <div className="grid md:grid-cols-2 gap-6 items-start">
+          {/* Left: Questions 1-4 */}
+          <Card className="bg-white border border-emerald-100 rounded-2xl p-4 sm:p-6 shadow-sm">
+            <ol className="space-y-6">
+              {gad7Questions.slice(0, 4).map((q, idx) => (
+                <li key={idx} className="space-y-3">
+                  <div className="font-medium text-slate-800">{idx + 1}. {q}</div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {choices.map((c) => (
+                      <button
+                        key={c.value}
+                        type="button"
+                        onClick={() => selectAnswer(idx, c.value)}
+                        className={`text-left rounded-xl border-2 px-3 py-3 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 ${
+                          answers[idx] === c.value
+                            ? "bg-emerald-600 text-white border-emerald-600 shadow-sm"
+                            : "bg-white text-slate-800 border-emerald-200 hover:bg-emerald-50"
+                        }`}
+                      >
+                        {c.label}
+                      </button>
+                    ))}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </Card>
+
+          {/* Right: Questions 5-7 */}
+          <Card className="bg-white border border-emerald-100 rounded-2xl p-4 sm:p-6 shadow-sm">
+            <ol className="space-y-6">
+              {gad7Questions.slice(4).map((q, relIdx) => {
+                const idx = relIdx + 4;
+                return (
+                  <li key={idx} className="space-y-3">
+                    <div className="font-medium text-slate-800">{idx + 1}. {q}</div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {choices.map((c) => (
+                        <button
+                          key={c.value}
+                          type="button"
+                          onClick={() => selectAnswer(idx, c.value)}
+                          className={`text-left rounded-xl border-2 px-3 py-3 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 ${
+                            answers[idx] === c.value
+                              ? "bg-emerald-600 text-white border-emerald-600 shadow-sm"
+                              : "bg-white text-slate-800 border-emerald-200 hover:bg-emerald-50"
+                          }`}
+                        >
+                          {c.label}
+                        </button>
+                      ))}
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </Card>
+        </div>
+
+        {/* Footer: total score and submit */}
+        <div className="mt-8 flex items-center justify-between">
+          <div className="text-slate-700">Score: <span className="font-semibold">{total}</span> · Severity: <span className="font-semibold">{severityFromScore(total)}</span></div>
+          <Button
+            disabled={!allAnswered}
+            onClick={handleSubmit}
+            className="bg-sky-600 hover:bg-sky-700 text-white disabled:opacity-50"
+          >
+            Submit
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}

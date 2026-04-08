@@ -12,7 +12,17 @@ from datetime import datetime
 import json
 
 def generate_pdf_report(results: dict, output_path: str = "radiology_report.pdf"):
-    """Generate a professional PDF report from classification results"""
+    """You are a clinical documentation specialist. Generate a structured, professional medical report , from the provided classification results and clinical findings.
+
+The report must include:
+- Findings
+- Impression / Diagnosis
+- Confidence Level
+- Recommendations
+
+Use formal clinical language, flag urgent findings with [URGENT], 
+and end with: "This is AI-assisted and must be reviewed by a 
+licensed physician before clinical use."""
     
     doc = SimpleDocTemplate(output_path, pagesize=letter,
                           rightMargin=72, leftMargin=72,
@@ -100,6 +110,37 @@ def generate_pdf_report(results: dict, output_path: str = "radiology_report.pdf"
         elements.append(Paragraph("<b>CXR Foundation (Chest Specialized):</b>", normal_style))
         if "top_predictions" in cxr:
             pred_text = ", ".join([f"{d} ({s:.1%})" for d, s in list(cxr["top_predictions"].items())[:3]])
+            elements.append(Paragraph(pred_text, normal_style))
+    # CXR Foundation Results
+    if "cxr" in classifications and "error" not in classifications["cxr"]:
+        cxr = classifications["cxr"]
+        elements.append(Paragraph("<b>CXR Foundation (Chest Specialized):</b>", normal_style))
+        if "top_predictions" in cxr:
+            pred_text = ", ".join([f"{d} ({s:.1%})" for d, s in list(cxr["top_predictions"].items())[:3]])
+            elements.append(Paragraph(pred_text, normal_style))
+        elements.append(Spacer(1, 0.1*inch))
+    
+    # Brain Tumor Results
+    if "brain_tumor" in classifications and "error" not in classifications["brain_tumor"]:
+        brain = classifications["brain_tumor"]
+        elements.append(Paragraph("<b>Brain Tumor MRI Analysis:</b>", normal_style))
+        if "disease" in brain:
+            elements.append(Paragraph(f"Primary Finding: {brain['disease']} (Confidence: {brain.get('confidence', 0):.1%})", normal_style))
+        if "predictions" in brain:
+            sorted_preds = sorted(brain["predictions"].items(), key=lambda x: x[1], reverse=True)[:5]
+            pred_text = "Probabilities: " + ", ".join([f"{d} ({s:.1%})" for d, s in sorted_preds])
+            elements.append(Paragraph(pred_text, normal_style))
+        elements.append(Spacer(1, 0.1*inch))
+
+    # Bone X-Ray Results
+    if "bone_xray" in classifications and "error" not in classifications["bone_xray"]:
+        bone = classifications["bone_xray"]
+        elements.append(Paragraph("<b>Bone X-Ray Analysis:</b>", normal_style))
+        if "disease" in bone:
+            elements.append(Paragraph(f"Primary Finding: {bone['disease']} (Confidence: {bone.get('confidence', 0):.1%})", normal_style))
+        if "predictions" in bone:
+            sorted_preds = sorted(bone["predictions"].items(), key=lambda x: x[1], reverse=True)[:5]
+            pred_text = "Probabilities: " + ", ".join([f"{d} ({s:.1%})" for d, s in sorted_preds])
             elements.append(Paragraph(pred_text, normal_style))
         elements.append(Spacer(1, 0.1*inch))
     
