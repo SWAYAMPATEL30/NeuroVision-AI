@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroVision AI — Project Presentation</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #060d1f;
+  --surface: #0a1128;
+  --card: rgba(17, 34, 64, 0.7);
+  --border: rgba(52,211,153,0.25);
+  --green: #34d399;
+  --blue: #38bdf8;
+  --purple: #a78bfa;
+  --amber: #fbbf24;
+  --pink: #f472b6;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --font: 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+.reveal-viewport { background: var(--bg); }
+.reveal { font-family: var(--font); color: var(--text); }
+.reveal h1,.reveal h2,.reveal h3,.reveal h4 { font-family: var(--font); text-transform: none; letter-spacing: -0.02em; }
+.reveal section { padding: 0 !important; }
+.reveal .slides section { top: 0 !important; }
+.reveal ul { list-style: none; padding: 0; }
+.reveal ul li::before { content: '✨'; color: var(--green); margin-right: 12px; font-weight: 700; }
+.reveal a { color: var(--green); text-decoration: none; }
+.reveal .progress { color: var(--green); }
+.reveal .controls { color: var(--green); }
+
+/* ——————————— SHARED ENHANCEMENTS ——————————— */
+.slide { width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; box-sizing: border-box; position: relative; overflow: hidden; }
+.slide::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at top left, rgba(52,211,153,0.08) 0%, transparent 60%), radial-gradient(circle at bottom right, rgba(56,189,248,0.08) 0%, transparent 60%); pointer-events: none; z-index: 0; }
+.slide::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; opacity: 0.6; z-index: 0; mask-image: linear-gradient(to bottom, black, transparent); -webkit-mask-image: linear-gradient(to bottom, black, transparent); }
+.content-wrapper { position: relative; z-index: 2; width: 100%; max-width: 1000px; }
+
+.badge { display: inline-block; padding: 6px 16px; border-radius: 30px; font-size: 0.65em; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-shadow: 0 0 10px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
+.badge-green { background: rgba(52,211,153,0.15); color: var(--green); border: 1px solid rgba(52,211,153,0.4); box-shadow: 0 0 20px rgba(52,211,153,0.2); }
+.badge-blue { background: rgba(56,189,248,0.15); color: var(--blue); border: 1px solid rgba(56,189,248,0.4); box-shadow: 0 0 20px rgba(56,189,248,0.2); }
+.badge-purple { background: rgba(167,139,250,0.15); color: var(--purple); border: 1px solid rgba(167,139,250,0.4); }
+.badge-amber { background: rgba(251,191,36,0.15); color: var(--amber); border: 1px solid rgba(251,191,36,0.4); }
+.badge-pink { background: rgba(244,114,182,0.15); color: var(--pink); border: 1px solid rgba(244,114,182,0.4); }
+
+.card { background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; backdrop-filter: blur(20px); box-shadow: 0 10px 40px rgba(0,0,0,0.3); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+.card:hover { transform: translateY(-5px); border-color: rgba(52,211,153,0.3); box-shadow: 0 20px 40px rgba(52,211,153,0.1); }
+
+.section-label { font-size: 0.65em; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; display: inline-block; background: rgba(52,211,153,0.1); padding: 4px 12px; border-radius: 4px; }
+.slide-title { font-size: 2.6em; font-weight: 900; line-height: 1.1; margin: 0 0 32px; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+.slide-title span { background: linear-gradient(135deg, var(--green), var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+/* ——————————— TITLE SLIDE ——————————— */
+.title-slide h1 { font-size: 4.8em; font-weight: 900; line-height: 1; margin: 0 0 20px; text-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.title-slide h1 .neon { background: linear-gradient(135deg, #34d399 0%, #38bdf8 50%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px rgba(52,211,153,0.4)); }
+.title-slide .tagline { font-size: 1.3em; color: var(--text); margin: 0 0 40px; font-weight: 300; opacity: 0.9; }
+
+.orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: float 8s ease-in-out infinite alternate; z-index: 0; }
+.orb1 { width: 500px; height: 500px; background: var(--green); top: -20%; left: -10%; }
+.orb2 { width: 450px; height: 450px; background: var(--blue); bottom: -15%; right: -10%; animation-delay: -3s; }
+.orb3 { width: 350px; height: 350px; background: var(--purple); top: 20%; right: 20%; animation-delay: -5s; }
+@keyframes float { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(-40px) scale(1.05); } }
+
+/* ——————————— SPLIT LAYOUT SLIDES ——————————— */
+.split-layout { display: flex; gap: 40px; align-items: center; width: 100%; max-width: 1100px; }
+.split-text { flex: 1; text-align: left; }
+.split-image { flex: 1.2; }
+.showcase-img { width: 100%; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(52,211,153,0.2); transition: transform 0.5s; object-fit: cover; }
+.showcase-img:hover { transform: scale(1.02) perspective(1000px) rotateY(-5deg); box-shadow: 0 30px 60px rgba(52,211,153,0.2); }
+
+/* ——————————— AI MODELS TABLE ——————————— */
+.model-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 0.75em; }
+.model-table th { background: transparent; color: var(--muted); padding: 10px 20px; text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8em; }
+.model-table td { padding: 18px 20px; background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); }
+.model-table tr td:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; font-weight: 700; color: #fff; border-left: 3px solid transparent; }
+.model-table tr:nth-child(1) td:first-child { border-left-color: var(--green); }
+.model-table tr:nth-child(2) td:first-child { border-left-color: var(--blue); }
+.model-table tr:nth-child(3) td:first-child { border-left-color: var(--amber); }
+.model-table tr td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+
+/* ——————————— METRIC BARS ——————————— */
+.metric-row { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 16px 24px; border-radius: 12px; }
+.metric-title { flex: 1; font-weight: 700; font-size: 0.8em; }
+.metric-bar-container { flex: 2; height: 12px; background: rgba(0,0,0,0.5); border-radius: 6px; overflow: hidden; position: relative; }
+.metric-bar-fill { height: 100%; border-radius: 6px; box-shadow: inset 0 0 10px rgba(255,255,255,0.2); }
+.metric-val { width: 60px; text-align: right; font-weight: 800; font-size: 0.9em; font-family: var(--mono); }
+
+/* ——————————— ARCHITECTURE SVG FLOW ——————————— */
+/* Pulse animations */
+@keyframes dashFlow { to { stroke-dashoffset: -40; } }
+@keyframes dotPulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.6;transform:scale(1.5);} }
+.arch-line { stroke-dasharray: 10,6; animation: dashFlow 1s linear infinite; }
+.arch-dot { transform-origin: center; animation: dotPulse 1.5s ease-in-out infinite; }
+
+/* ——————————— TEAM GRID (UPDATED) ——————————— */
+.team-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; width: 100%; margin: 30px 0; }
+.team-card { margin-top:20px; background: linear-gradient(145deg, rgba(17,34,64,0.8) 0%, rgba(10,25,47,0.9) 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 30px 20px; text-align: center; position: relative; padding-top: 40px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); transition: transform 0.3s; }
+.team-card:hover { transform: translateY(-10px); border-color: var(--blue); box-shadow: 0 20px 40px rgba(56,189,248,0.2); }
+.team-avatar { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); width: 70px; height: 70px; border-radius: 50%; background: var(--bg); border: 2px solid var(--green); display: flex; align-items: center; justify-content: center; font-size: 2em; box-shadow: 0 0 20px rgba(52,211,153,0.4); }
+.team-name { font-size: 0.85em; font-weight: 800; color: #fff; margin-bottom: 6px; }
+.team-sap { font-size: 0.65em; font-family: var(--mono); color: var(--muted); background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 20px; display: inline-block; }
+
+/* ——————————— TIMELINE ——————————— */
+.timeline { display: flex; position: relative; margin-top: 30px; }
+.timeline::before { content: ''; position: absolute; top: 15px; left: 50px; right: 50px; height: 3px; background: linear-gradient(90deg, var(--green), var(--blue), var(--purple), var(--pink)); border-radius: 3px; }
+.tl-item { flex: 1; text-align: center; position: relative; z-index: 1; }
+.tl-dot { width: 34px; height: 34px; background: var(--bg); border: 4px solid; border-radius: 50%; margin: 0 auto 16px; box-shadow: 0 0 0 6px var(--bg); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.5em; }
+.tl-item:nth-child(1) .tl-dot { border-color: var(--green); color: var(--green); }
+.tl-item:nth-child(2) .tl-dot { border-color: var(--blue); color: var(--blue); }
+.tl-item:nth-child(3) .tl-dot { border-color: var(--purple); color: var(--purple); }
+.tl-item:nth-child(4) .tl-dot { border-color: var(--pink); color: var(--pink); }
+.tl-content { background: var(--card); border: 1px solid rgba(255,255,255,0.05); padding: 16px; border-radius: 12px; margin: 0 10px; }
+.tl-content h4 { font-size: 0.75em; color: #fff; margin: 0 0 8px; }
+.tl-content p { font-size: 0.6em; color: var(--muted); margin: 0; line-height: 1.5; }
+
+.slide-num { position: absolute; bottom: 20px; right: 30px; font-size: 0.6em; color: var(--muted); font-family: var(--mono); font-weight: 700; z-index: 10; letter-spacing: 0.1em; }
+
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ==============================================
+     1: TITLE SLIDE
+=============================================== -->
+<section>
+<div class="slide title-slide">
+  <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+  
+  <div class="content-wrapper" style="text-align:center">
+    <div class="badge badge-green" style="margin-bottom:24px; font-size:0.8em; padding:8px 24px">🏥 Final Year Engineering Project · 2024–25</div>
+    <h1>🧠 <span class="neon">NeuroVision AI</span></h1>
+    <p class="tagline">An Autonomous, Full-Stack Medical Intelligence & Diagnostics Platform</p>
+    
+    <div style="display:flex;gap:12px;justify-content:center;margin-bottom:40px">
+      <span class="badge badge-blue">Next.js</span>
+      <span class="badge badge-purple">FastAPI</span>
+      <span class="badge badge-amber">Groq LLaMA-3.3</span>
+      <span class="badge badge-pink">PyTorch Ensemble</span>
+    </div>
+  </div>
+  <div class="slide-num">01</div>
+</div>
+</section>
+
+<!-- ==============================================
+     2: PROBLEM
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="content-wrapper" style="max-width:1100px">
+    <div class="section-label">The Core Issue</div>
+    <div class="slide-title">Healthcare is <span>Fragmented & Slow</span></div>
+    
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:24px;">
+      <div class="card">
+        <div style="font-size:2.5em; margin-bottom:16px">⏳</div>
+        <h4 style="color:var(--pink); font-size:1.1em; margin-bottom:12px">Delayed Diagnostics</h4>
+        <p style="font-size:0.75em; color:var(--muted); line-height:1.6">Patients wait days for radiology reviews. In critical conditions like brain tumors, every hour lost impacts survival rates.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:2.5em; margin-bottom:16px">🧩</div>
+        <h4 style="color:var(--amber); font-size:1.1em; margin-bottom:12px">Siloed Data</h4>
+        <p style="font-size:0.75em; color:var(--muted); line-height:1.6">Scans, consultations, and mental health tracking happen on separate, disconnected platforms. There is no unified patient view.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:2.5em; margin-bottom:16px">🧠</div>
+        <h4 style="color:var(--purple); font-size:1.1em; margin-bottom:12px">Mental Health Stigma</h4>
+        <p style="font-size:0.75em; color:var(--muted); line-height:1.6">Lack of accessible, private preliminary mental health screening leaves conditions like depression and anxiety severely under-diagnosed.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">02</div>
+</div>
+</section>
+
+<!-- ==============================================
+     3: DIAGNOSTICS SHOWCASE
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="content-wrapper split-layout">
+    <div class="split-text">
+      <div class="section-label">Core Engine</div>
+      <div class="slide-title">Real-Time AI<br><span>Diagnostics</span></div>
+      <ul style="font-size:0.85em; line-height:1.8; color:var(--text); margin-bottom:24px">
+        <li><strong>Multi-Modal Inputs:</strong> Analysing Chest X-Rays, Brain MRIs, and General Bone structure scans.</li>
+        <li><strong>Sub-3 Second Inference:</strong> Instant probability distributions for 20+ pathologies.</li>
+        <li><strong>Clinical Report Generation:</strong> Uses Groq LLaMA-3.3-70b to write structured, radiologist-style findings automatically.</li>
+        <li><strong>Export to PDF:</strong> Native ReportLab integration for quick sharing with specialists.</li>
+      </ul>
+      <div class="badge badge-green">94.4% Chest Accuracy</div>
+      <div class="badge badge-blue">98% Brain Tumor Detection</div>
+    </div>
+    <div class="split-image">
+      <img src="slide_diagnostics.png" alt="Diagnostics UI" class="showcase-img glow-green" onerror="this.src='https://images.unsplash.com/photo-1576091160550-2173ff9e5ee5?q=80&w=1200&auto=format&fit=crop';">
+    </div>
+  </div>
+  <div class="slide-num">03</div>
+</div>
+</section>
+
+<!-- ==============================================
+     4: FEATURES SHOWCASE
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="content-wrapper split-layout" style="flex-direction:row-reverse">
+    <div class="split-text">
+      <div class="section-label">Ecosystem</div>
+      <div class="slide-title">Integrated<br><span>Health Features</span></div>
+      <p style="font-size:0.8em; color:var(--muted); line-height:1.6; margin-bottom:20px">NeuroVision goes beyond imaging models to provide an end-to-end digital health companion.</p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; font-size:0.75em">
+        <div class="card" style="padding:16px">
+          <strong style="color:var(--green)">🎙️ Aria Voice Therapist</strong><br>
+          <span style="color:var(--muted)">Real-time speech API + empathetic Groq conversational engine.</span>
+        </div>
+        <div class="card" style="padding:16px">
+          <strong style="color:var(--blue)">📅 Live Doctor Map</strong><br>
+          <span style="color:var(--muted)">Interactive Leaflet booking system mapping specialists to patients.</span>
+        </div>
+        <div class="card" style="padding:16px">
+          <strong style="color:var(--purple)">🧠 Cognitive Games</strong><br>
+          <span style="color:var(--muted)">Memory, speed, and recall interactive tracking for neurological baselines.</span>
+        </div>
+        <div class="card" style="padding:16px">
+          <strong style="color:var(--pink)">📊 Mind Planner</strong><br>
+          <span style="color:var(--muted)">PHQ-9 & GAD-7 assessments with AI-generated weekly wellness plans.</span>
+        </div>
+      </div>
+    </div>
+    <div class="split-image">
+      <img src="slide_features.png" alt="Features UI" class="showcase-img glow-blue" onerror="this.src='https://images.unsplash.com/photo-1551076805-e1869033e561?q=80&w=1200&auto=format&fit=crop';">
+    </div>
+  </div>
+  <div class="slide-num">04</div>
+</div>
+</section>
+
+<!-- ==============================================
+     5: ARCHITECTURE
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="content-wrapper" style="text-align:center">
+    <div class="section-label">Under the Hood</div>
+    <div class="slide-title">System <span>Architecture</span></div>
+    
+    <div style="background:var(--card); border:1px solid rgba(255,255,255,0.1); border-radius:24px; padding:30px; box-shadow:0 20px 50px rgba(0,0,0,0.4); margin-top:20px">
+      <svg viewBox="0 0 900 350" width="100%" style="font-family:Inter,sans-serif">
+        <defs>
+          <linearGradient id="gl" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#38bdf8"/>
+          </linearGradient>
+          <filter id="shadow"><feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="black" flood-opacity="0.3"/></filter>
+        </defs>
+        
+        <!-- Frontend -->
+        <rect x="50" y="130" width="220" height="90" rx="16" fill="#0f172a" stroke="#34d399" stroke-width="2" filter="url(#shadow)"/>
+        <text x="160" y="165" text-anchor="middle" font-size="16" font-weight="800" fill="#f8fafc">🖥️ Next.js Frontend</text>
+        <text x="160" y="190" text-anchor="middle" font-size="12" fill="#94a3b8">React App Router · Tailwind</text>
+        <text x="160" y="205" text-anchor="middle" font-size="12" fill="#94a3b8">Patient Dashboard UI</text>
+
+        <!-- API Gateway -->
+        <rect x="350" y="130" width="200" height="90" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" filter="url(#shadow)"/>
+        <text x="450" y="165" text-anchor="middle" font-size="16" font-weight="800" fill="#f8fafc">⚡ FastAPI Backend</text>
+        <text x="450" y="190" text-anchor="middle" font-size="12" fill="#94a3b8">Async Python Engine</text>
+        <text x="450" y="205" text-anchor="middle" font-size="12" fill="#94a3b8">Dynamic Model Routing</text>
+
+        <!-- Connectivity -->
+        <path d="M270,175 L350,175" stroke="url(#gl)" stroke-width="3" fill="none" class="arch-line"/>
+        <circle cx="310" cy="175" r="4" fill="#fff" class="arch-dot"/>
+        
+        <!-- Models Branching -->
+        <path d="M550,175 C580,175 590,60 620,60 L650,60" stroke="#a78bfa" stroke-width="2" fill="none" class="arch-line"/>
+        <path d="M550,175 L650,175" stroke="#fbbf24" stroke-width="2" fill="none" class="arch-line"/>
+        <path d="M550,175 C580,175 590,290 620,290 L650,290" stroke="#f472b6" stroke-width="2" fill="none" class="arch-line"/>
+
+        <!-- AI Models Node -->
+        <rect x="650" y="25" width="200" height="70" rx="12" fill="#1e1040" stroke="#a78bfa" stroke-width="1.5" filter="url(#shadow)"/>
+        <text x="750" y="55" text-anchor="middle" font-size="14" font-weight="800" fill="#c4b5fd">🤖 PyTorch AI Engine</text>
+        <text x="750" y="75" text-anchor="middle" font-size="10" fill="#a78bfa">CustomNet121, InceptionV3, MedSigLIP</text>
+
+        <!-- Groq Node -->
+        <rect x="650" y="140" width="200" height="70" rx="12" fill="#451a03" stroke="#fbbf24" stroke-width="1.5" filter="url(#shadow)"/>
+        <text x="750" y="170" text-anchor="middle" font-size="14" font-weight="800" fill="#fcd34d">☁️ Groq LLaMA-3.3</text>
+        <text x="750" y="190" text-anchor="middle" font-size="10" fill="#fbbf24">NLP Report Generation, MedBot API</text>
+
+        <!-- Supabase Node -->
+        <rect x="650" y="255" width="200" height="70" rx="12" fill="#061f30" stroke="#f472b6" stroke-width="1.5" filter="url(#shadow)"/>
+        <text x="750" y="285" text-anchor="middle" font-size="14" font-weight="800" fill="#fbcfe8">🗄️ Supabase Postgres</text>
+        <text x="750" y="305" text-anchor="middle" font-size="10" fill="#f472b6">Auth, Patients, Findings & Appointments</text>
+      </svg>
+    </div>
+  </div>
+  <div class="slide-num">05</div>
+</div>
+</section>
+
+<!-- ==============================================
+     6: AI MODELS DETAIL
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="content-wrapper">
+    <div class="section-label">Machine Learning</div>
+    <div class="slide-title">5-Model <span>Classifier Protocol</span></div>
+    
+    <table class="model-table">
+      <thead>
+        <tr><th>Sub-System</th><th>Implementation</th><th>Training Base</th><th>Specialty</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CustomNet121</strong></td>
+          <td style="font-family:var(--mono); color:var(--blue)">DenseNet121 (Fine-tuned)</td>
+          <td>NIH ChestX-ray8 (112K images)</td>
+          <td style="color:var(--green); font-weight:700">🫁 Lungs & Thorax</td>
+        </tr>
+        <tr>
+          <td><strong>Inception Ensemble</strong></td>
+          <td style="font-family:var(--mono); color:var(--blue)">InceptionV3 + Custom Head</td>
+          <td>Brain Tumor MRI (7K images)</td>
+          <td style="color:var(--green); font-weight:700">🧠 Neurological</td>
+        </tr>
+        <tr>
+          <td><strong>MedSigLIP</strong></td>
+          <td style="font-family:var(--mono); color:var(--blue)">Vision-Language Transformer</td>
+          <td>HuggingFace Medical Pairs</td>
+          <td style="color:var(--green); font-weight:700">🦴 Orthopedic (Zero-Shot)</td>
+        </tr>
+        <tr>
+          <td><strong>CheXpert NLP</strong></td>
+          <td style="font-family:var(--mono); color:var(--blue)">DenseNet 14-Label Output</td>
+          <td>Stanford CheXpert (224K images)</td>
+          <td style="color:var(--green); font-weight:700">📋 Pathology Mapping</td>
+        </tr>
+        <tr>
+          <td style="border-left-color:var(--pink)"><strong>Groq Core</strong></td>
+          <td style="font-family:var(--mono); color:var(--blue)">LLaMA-3.3-70b-versatile</td>
+          <td>Open/Medical NLP Corpora</td>
+          <td style="color:var(--green); font-weight:700">📝 Structural Reports</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slide-num">06</div>
+</div>
+</section>
+
+<!-- ==============================================
+     7: PERFORMANCE DASHBOARD
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="content-wrapper" style="max-width:900px">
+    <div class="section-label">Validation</div>
+    <div class="slide-title">Diagnostic <span>Accuracy</span></div>
+    
+    <div class="card" style="padding:40px">
+      <!-- Row 1 -->
+      <div class="metric-row">
+        <div class="metric-title" style="color:var(--green)">Chest X-Ray Capability (CustomNet)</div>
+        <div class="metric-bar-container"><div class="metric-bar-fill" style="width:94.4%; background: linear-gradient(90deg, #10b981, #34d399)"></div></div>
+        <div class="metric-val" style="color:var(--green)">94.4%</div>
+      </div>
+      <!-- Row 2 -->
+      <div class="metric-row">
+        <div class="metric-title" style="color:var(--blue)">Brain Tumor Detection (InceptionV3)</div>
+        <div class="metric-bar-container"><div class="metric-bar-fill" style="width:98.5%; background: linear-gradient(90deg, #0ea5e9, #38bdf8)"></div></div>
+        <div class="metric-val" style="color:var(--blue)">98.5%</div>
+      </div>
+      <!-- Row 3 -->
+      <div class="metric-row">
+        <div class="metric-title" style="color:var(--purple)">Generative Report Completeness</div>
+        <div class="metric-bar-container"><div class="metric-bar-fill" style="width:96.0%; background: linear-gradient(90deg, #8b5cf6, #a78bfa)"></div></div>
+        <div class="metric-val" style="color:var(--purple)">96.0%</div>
+      </div>
+      <!-- Row 4 -->
+      <div class="metric-row" style="margin-bottom:0">
+        <div class="metric-title" style="color:var(--amber)">System E2E Inference Time Guarantee</div>
+        <div class="metric-bar-container"><div class="metric-bar-fill" style="width:100%; background: linear-gradient(90deg, #f59e0b, #fbbf24)"></div></div>
+        <div class="metric-val" style="color:var(--amber)">&lt; 3.0s</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">07</div>
+</div>
+</section>
+
+<!-- ==============================================
+     8: ROADMAP
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="content-wrapper">
+    <div class="section-label">Looking Forward</div>
+    <div class="slide-title" style="text-align:center">Platform <span>Roadmap</span></div>
+    
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">✓</div>
+        <div class="tl-content">
+          <h4 style="color:var(--green)">Phase 1: Foundation</h4>
+          <p>Core multimodal diagnostics, doctor booking, and base mental health assessment modules deployed.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">2</div>
+        <div class="tl-content">
+          <h4 style="color:var(--blue)">Phase 2: Complex Imaging</h4>
+          <p>Full support for native DICOM file parsing, CT scans, and structural PET imaging integration.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">3</div>
+        <div class="tl-content">
+          <h4 style="color:var(--purple)">Phase 3: Domain NLP</h4>
+          <p>Fine-tuning a custom medical local LLM (e.g., Llama-3-Med) to remove API dependency for critical care reports.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">4</div>
+        <div class="tl-content">
+          <h4 style="color:var(--pink)">Phase 4: Compliance</h4>
+          <p>Full HIPAA-compliant encrypted storage migration, audit logging, and mobile React Native application release.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">08</div>
+</div>
+</section>
+
+<!-- ==============================================
+     9: TEAM
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="content-wrapper" style="text-align:center; max-width:1200px">
+    <div class="section-label">DJSCE 2024-25</div>
+    <div class="slide-title">The <span>Builders</span></div>
+    
+    <p style="font-size:0.85em; color:var(--muted); margin-bottom:20px; max-width:600px; margin:0 auto">
+      A multidisciplinary engineering team driving ai-first healthcare accessibility.
+    </p>
+
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">👨‍💻</div>
+        <div class="team-name">Swayam Patel</div>
+        <div class="team-sap">60004240041</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">🎨</div>
+        <div class="team-name">Akshit Shah</div>
+        <div class="team-sap">60004240020</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">🧠</div>
+        <div class="team-name">Vraj Birje</div>
+        <div class="team-sap">60004240044</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">🔌</div>
+        <div class="team-name">Faisal Khan</div>
+        <div class="team-sap">60004240019</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">📝</div>
+        <div class="team-name">Priyanka Limbad</div>
+        <div class="team-sap">60004220060</div>
+      </div>
+    </div>
+
+    <!-- Leadership Row -->
+    <div style="display:flex; justify-content:center; gap:30px; margin-top:20px">
+      <div style="background:rgba(255,255,255,0.05); padding:12px 24px; border-radius:12px; border:1px solid rgba(56,189,248,0.2)">
+        <span style="font-size:0.6em; text-transform:uppercase; color:var(--blue); font-weight:800; display:block">Project Guide</span>
+        <span style="font-size:0.9em; font-weight:700">Prof. Khushali Deulkar</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.05); padding:12px 24px; border-radius:12px; border:1px solid rgba(167,139,250,0.2)">
+        <span style="font-size:0.6em; text-transform:uppercase; color:var(--purple); font-weight:800; display:block">H.O.D. Computer Eng.</span>
+        <span style="font-size:0.9em; font-weight:700">Dr. Meera Narvekar</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.05); padding:12px 24px; border-radius:12px; border:1px solid rgba(52,211,153,0.2)">
+        <span style="font-size:0.6em; text-transform:uppercase; color:var(--green); font-weight:800; display:block">Principal, DJSCE</span>
+        <span style="font-size:0.9em; font-weight:700">Dr. Hari Vasudevan</span>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">09</div>
+</div>
+</section>
+
+<!-- ==============================================
+     10: THANK YOU
+=============================================== -->
+<section>
+<div class="slide title-slide">
+  <div class="orb orb1"></div>
+  <div class="orb orb2" style="animation-duration: 10s"></div>
+  
+  <div class="content-wrapper" style="text-align:center">
+    <div style="font-size:4em; margin-bottom:10px">✨</div>
+    <h1>Thank <span class="neon">You</span></h1>
+    <p class="tagline" style="font-size:1.4em; font-weight:400; font-style:italic">"Fusing Artificial Intelligence with Human Empathy"</p>
+    
+    <a href="https://github.com/SWAYAMPATEL30" target="_blank" style="display:inline-block; margin-top:30px; background:rgba(255,255,255,0.08); padding:15px 30px; border-radius:12px; border:1px solid var(--border); font-size:0.9em; font-weight:700; transition:all 0.3s">
+      <span style="color:var(--text)">View Source on GitHub</span> <span style="color:var(--green)">→</span>
+    </a>
+  </div>
+</div>
+</section>
+
+</div><!-- /slides -->
+</div><!-- /reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  transition: 'zoom', // Smoother modern transition
+  transitionSpeed: 'fast',
+  backgroundTransition: 'fade',
+  controls: true,
+  progress: true,
+  center: false,
+  width: '100%',
+  height: '100%',
+  margin: 0,
+  minScale: 0.5,
+  maxScale: 1.5,
+  plugins: []
+});
+
+// Re-trigger bar animations on slide enter
+Reveal.on('slidechanged', function(event) {
+  const fills = event.currentSlide.querySelectorAll('.metric-bar-fill');
+  fills.forEach(el => {
+    const width = el.style.width;
+    el.style.width = '0';
+    el.offsetHeight; // reflow
+    el.style.transition = 'width 1.5s cubic-bezier(0.16, 1, 0.3, 1)';
+    el.style.width = width;
+  });
+});
+</script>
+</body>
+</html>

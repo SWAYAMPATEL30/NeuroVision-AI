@@ -562,10 +562,7 @@ async def classify(
         report_text=report_text or None,
         generate_report=generate_report,
         use_comprehensive=use_comprehensive,
-        fast_mode=fast_mode,
-        patient_name=patient_name,
-        patient_age=patient_age,
-        patient_gender=patient_gender
+        fast_mode=fast_mode
     )
 
     # Auto-save report to Supabase
