@@ -1,5 +1,9 @@
 <div align="center">
 
+# 🧠 NeuroVision AI
+
+*A Full-Stack AI-Powered Medical Intelligence & Diagnostics Platform*
+
 [![Next.js](https://img.shields.io/badge/Next.js_15-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org)
@@ -685,18 +689,17 @@ This project was developed at **Shri Vile Parle Kelavani Mandal's**
 *(Autonomous College Affiliated to University of Mumbai)*
 *NAAC Accredited with "A" Grade (CGPA: 3.18)*
 
-Department of Computer Engineering — 2024–2025
+Department of Computer Engineering — 2025–2026
 
 <br>
 
-| Name | SAP ID | Role |
-|------|--------|------|
-| **Swayam Patel** | 60004240041 | AI/ML Pipeline, Backend & Full-Stack Lead |
-| **Akshit Shah** | 60004240020 | Frontend Development & UI/UX Design |
-| **Vraj Birje** | 60004240044 | Model Training & Data Engineering |
-| **Faisal Khan** | 60004240019 | API Integration & Database Architecture |
-| **Priyanka Limbad** | 60004220060 | Research, Documentation & Testing |
-
+| Name | SAP ID |
+|------|--------|
+| **Swayam Patel** | 60004240041 | 
+| **Akshit Shah** | 60004240020 |
+| **Vraj Birje** | 60004240044 |
+| **Faisal Khan** | 60004240019 | 
+| **Priyanka Limbad** | 60004220060 |
 <br>
 
 **Project Guide:** Prof. Khushali Deulkar &nbsp;|&nbsp; **H.O.D.:** Dr. Meera Narvekar &nbsp;|&nbsp; **Principal:** Dr. Hari Vasudevan
@@ -707,17 +710,10 @@ Department of Computer Engineering — 2024–2025
 
 <br>
 
-[![GitHub](https://img.shields.io/badge/GitHub-SWAYAMPATEL30-181717?style=for-the-badge&logo=github)](https://github.com/SWAYAMPATEL30)
+[![GitHub](https://img.shields.io/badge/GitHub-NeuroVisionAI-181717?style=for-the-badge&logo=github)](https://github.com/SWAYAMPATEL30)
 
 </div>
 
 
 ---
 
-<div align="center">
-
-**NeuroVision AI** — Built with ❤️ for accessible, intelligent healthcare
-
-*This platform is for research and educational purposes. All AI diagnoses must be reviewed by a licensed healthcare professional before clinical action.*
-
-</div>
