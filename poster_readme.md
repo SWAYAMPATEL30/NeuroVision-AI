@@ -1,6 +1,6 @@
-# 🧬 Team Synapse - AVINYA 2026 Poster Content Blueprint
+# 🧬 Team NeuroVision AI - AVINYA 2026 Poster Content Blueprint
 
-**Project Title:** Synapse: AI-Powered Precision Medical Diagnostic Platform  
+**Project Title:** NeuroVision AI: AI-Powered Precision Medical Diagnostic Platform  
 **Event:** AVINYA 2026 - IPD Tech Expo  
 **Department:** DJSCE Computer Engineering  
 **Poster Format:** 16:9 Landscape  
@@ -8,7 +8,7 @@
 ---
 
 ## 1. 📝 INTRODUCTION
-Synapse is an advanced medical diagnostic ecosystem designed to bridge the gap between complex radiological data and actionable clinical insights. By leveraging state-of-the-art Deep Learning architectures, Synapse provides automated screening for Brain Tumors, Chest Pathologies, and Skeletal Abnormalities. The system integrates a real-time Medical AI Chatbot (MedBot) and automated LLM-based clinical report generation to support healthcare professionals in frontline diagnostics.
+NeuroVision AI is an advanced medical diagnostic ecosystem designed to bridge the gap between complex radiological data and actionable clinical insights. By leveraging state-of-the-art Deep Learning architectures, NeuroVision AI provides automated screening for Brain Tumors, Chest Pathologies, and Skeletal Abnormalities. The system integrates a real-time Medical AI Chatbot (MedBot) and automated LLM-based clinical report generation to support healthcare professionals in frontline diagnostics.
 
 **Key Problems Addressed:**
 - Diagnostic bottleneck in radiology.
@@ -54,7 +54,7 @@ The system follows a modular, high-performance architecture ensuring model stabi
 ---
 
 ## 6. 🏁 CONCLUSION
-Synapse demonstrates the potential of integrating diverse AI modalities into a single, unified medical interface. By combining computer vision for image analysis with natural language processing for report generation and user interaction, we provide a holistic tool that enhances diagnostic speed and accuracy, setting a new standard for student-led IPD projects in healthcare technology.
+NeuroVision AI demonstrates the potential of integrating diverse AI modalities into a single, unified medical interface. By combining computer vision for image analysis with natural language processing for report generation and user interaction, we provide a holistic tool that enhances diagnostic speed and accuracy, setting a new standard for student-led IPD projects in healthcare technology.
 
 ---
 

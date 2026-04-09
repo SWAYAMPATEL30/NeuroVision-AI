@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CalendarDays, Clock, Video, MapPin, CheckCircle2, XCircle } from "lucide-react";
 
-const BOOKING_KEY = "synapse-all-bookings";
+const BOOKING_KEY = "neurovision-all-bookings";
 
 interface Booking {
   id: string;
@@ -31,7 +31,7 @@ export default function DoctorAppointmentsPage() {
       if (stored) setBookings(JSON.parse(stored));
     } catch {}
     // BroadcastChannel: real-time updates across tabs
-    const bc = typeof BroadcastChannel !== "undefined" ? new BroadcastChannel("synapse-bookings") : null;
+    const bc = typeof BroadcastChannel !== "undefined" ? new BroadcastChannel("neurovision-bookings") : null;
     if (bc) {
       bc.onmessage = () => {
         try {

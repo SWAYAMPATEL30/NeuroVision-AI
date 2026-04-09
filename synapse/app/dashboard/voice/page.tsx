@@ -47,10 +47,10 @@ interface Message {
   timestamp: Date;
 }
 
-const STORAGE_KEY = "synapse-voice-therapist-history";
+const STORAGE_KEY = "neurovision-voice-therapist-history";
 
 async function getTherapistResponse(userMessage: string, history: Message[]): Promise<string> {
-  const systemPrompt = `You are a compassionate and professional mental health therapist named Aria. 
+  const systemPrompt = `You are a compassionate and professional mental health therapist named Aria, working for NeuroVision AI.
 You listen carefully, ask thoughtful follow-up questions, and provide supportive responses.
 Always respond with empathy, warmth, and professional insight. Keep responses concise (2-3 sentences).
 Never diagnose. Encourage professional help for serious issues.`;
@@ -173,6 +173,8 @@ export default function VoiceTherapistPage() {
   }, [messages]);
 
   const handleUserSpeech = useCallback(async (text: string) => {
+    if (!text.trim() || isProcessing) return;
+    
     setTranscript("");
     const userMsg: Message = {
       id: crypto.randomUUID(),
@@ -180,36 +182,45 @@ export default function VoiceTherapistPage() {
       text,
       timestamp: new Date(),
     };
-    setMessages(prev => {
-      const updated = [...prev, userMsg];
-      setIsProcessing(true);
-      // Get AI response with full history
-      getTherapistResponse(text, updated).then(response => {
-        const therapistMsg: Message = {
-          id: crypto.randomUUID(),
-          role: "therapist",
-          text: response,
-          timestamp: new Date(),
-        };
-        setMessages(prev2 => [...prev2, therapistMsg]);
-        setIsProcessing(false);
-        // Speak the response using free Web Speech Synthesis API
-        if (!isMuted && synthRef.current) {
-          synthRef.current.cancel();
-          const utterance = new SpeechSynthesisUtterance(response);
-          utterance.rate = 0.9;
-          utterance.pitch = 1.05;
-          const voices = synthRef.current.getVoices();
-          const femaleVoice = voices.find(v => v.name.includes("Female") || v.name.includes("Samantha") || v.name.includes("Karen") || v.name.includes("Google UK English Female"));
-          if (femaleVoice) utterance.voice = femaleVoice;
-          utterance.onstart = () => setIsSpeaking(true);
-          utterance.onend = () => setIsSpeaking(false);
-          synthRef.current.speak(utterance);
-        }
-      });
-      return updated;
-    });
-  }, [isMuted]);
+    
+    // 1. Add user message first
+    setMessages(prev => [...prev, userMsg]);
+    setIsProcessing(true);
+
+    try {
+      // 2. Get AI response with full state
+      // Note: we pass the updated history including the current message
+      const response = await getTherapistResponse(text, [...messages, userMsg]);
+      
+      const therapistMsg: Message = {
+        id: crypto.randomUUID(),
+        role: "therapist",
+        text: response,
+        timestamp: new Date(),
+      };
+      
+      // 3. Add AI message
+      setMessages(prev => [...prev, therapistMsg]);
+      
+      // 4. Speak response
+      if (!isMuted && synthRef.current) {
+        synthRef.current.cancel();
+        const utterance = new SpeechSynthesisUtterance(response);
+        utterance.rate = 0.9;
+        utterance.pitch = 1.05;
+        const voices = synthRef.current.getVoices();
+        const femaleVoice = voices.find(v => v.name.includes("Female") || v.name.includes("Aria") || v.name.includes("Google UK English Female"));
+        if (femaleVoice) utterance.voice = femaleVoice;
+        utterance.onstart = () => setIsSpeaking(true);
+        utterance.onend = () => setIsSpeaking(false);
+        synthRef.current.speak(utterance);
+      }
+    } catch (err) {
+      console.error("Speech handling error:", err);
+    } finally {
+      setIsProcessing(false);
+    }
+  }, [isMuted, isProcessing, messages]);
 
   const startListening = () => {
     if (!recognitionRef.current) return;

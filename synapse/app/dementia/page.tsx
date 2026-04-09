@@ -219,7 +219,7 @@ export default function DementiaLanding() {
               <p className="text-white/90 mt-1">Designed for clinics, communities, and families</p>
             </div>
             <div className="flex gap-3">
-              <a href="/auth" className="px-6 py-3 rounded-full bg-white text-emerald-700 font-semibold hover:bg-white/90 transition">Get Started</a>
+              <a href="/register" className="px-6 py-3 rounded-full bg-white text-emerald-700 font-semibold hover:bg-white/90 transition">Get Started</a>
               <a href="/dashboard" className="px-6 py-3 rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/20 transition">Contact Us</a>
             </div>
           </div>

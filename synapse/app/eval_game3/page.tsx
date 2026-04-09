@@ -51,7 +51,7 @@ export default function GAD7Onboarding() {
       const severity = severityFromScore(total);
       if (typeof window !== "undefined") {
         window.localStorage.setItem(
-          "synapse_gad7",
+          "neurovision_gad7",
           JSON.stringify({ score: total, severity, at: Date.now() })
         );
       }

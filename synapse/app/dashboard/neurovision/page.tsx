@@ -211,7 +211,7 @@ export default function NeuroVisionPage() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Synapse_Medical_Report_${scanTypeMap[activeTab]?.replace(/ /g, "_") || activeTab}_${new Date().toISOString().slice(0, 10)}.pdf`;
+      a.download = `NeuroVision AI_Medical_Report_${scanTypeMap[activeTab]?.replace(/ /g, "_") || activeTab}_${new Date().toISOString().slice(0, 10)}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -351,7 +351,7 @@ export default function NeuroVisionPage() {
                               value={patientName}
                               onChange={e => setPatientName(e.target.value)}
                               placeholder="e.g. Swayam Patel"
-                              className="mt-1 bg-slate-900/60 border-white/5 text-sm h-9 placeholder:text-slate-600"
+                              className="mt-1 bg-slate-900/60 border-white/5 text-sm h-9 text-slate-200 placeholder:text-slate-600"
                             />
                           </div>
                           <div>
@@ -360,7 +360,7 @@ export default function NeuroVisionPage() {
                               value={patientAge}
                               onChange={e => setPatientAge(e.target.value)}
                               placeholder="e.g. 25"
-                              className="mt-1 bg-slate-900/60 border-white/5 text-sm h-9 placeholder:text-slate-600"
+                              className="mt-1 bg-slate-900/60 border-white/5 text-sm h-9 text-slate-200 placeholder:text-slate-600"
                             />
                           </div>
                           <div>
@@ -371,9 +371,9 @@ export default function NeuroVisionPage() {
                               className="mt-1 w-full bg-slate-900/60 border border-white/5 text-sm h-9 rounded-md px-3 text-slate-200 focus:ring-2 focus:ring-blue-500/40 outline-none"
                             >
                               <option value="">Select</option>
-                              <option value="Male">Male</option>
-                              <option value="Female">Female</option>
-                              <option value="Other">Other</option>
+                              <option value="Male" className="bg-slate-950 text-slate-200">Male</option>
+                              <option value="Female" className="bg-slate-950 text-slate-200">Female</option>
+                              <option value="Other" className="bg-slate-950 text-slate-200">Other</option>
                             </select>
                           </div>
                         </div>
@@ -389,7 +389,7 @@ export default function NeuroVisionPage() {
                               <Upload className="w-8 h-8 text-blue-400" />
                             </div>
                             <div className="text-center">
-                              <p className="text-lg font-semibold">{file ? file.name : "Select Medical Scan"}</p>
+                              <p className="text-lg font-semibold text-slate-200">{file ? file.name : "Select Medical Scan"}</p>
                               <p className="text-sm text-slate-500 mt-1">Supporting frontline images, DICOM exports</p>
                             </div>
                             <Input 
@@ -435,12 +435,12 @@ export default function NeuroVisionPage() {
                               onClick={() => document.getElementById('file-upload-gen')?.click()}
                             >
                                <Upload className="w-6 h-6 text-blue-400" />
-                               <span className="text-sm font-medium">{file ? "Image Attached" : "Upload Image"}</span>
+                               <span className="text-sm font-medium text-slate-200">{file ? "Image Attached" : "Upload Image"}</span>
                                <Input id="file-upload-gen" type="file" className="hidden" onChange={handleFileChange} />
                             </div>
                             <Textarea 
                                placeholder="Optional: Add clinical notes to correlate with image..." 
-                               className="bg-slate-950/40 border-white/5 resize-none h-full pt-4"
+                               className="bg-slate-950/40 border-white/5 resize-none h-full pt-4 text-slate-200"
                                value={reportText}
                                onChange={(e) => setReportText(e.target.value)}
                             />
@@ -451,7 +451,7 @@ export default function NeuroVisionPage() {
                         <div className="space-y-4">
                           <Textarea 
                             placeholder="Paste medical report or patient history here..." 
-                            className="bg-slate-950/40 border-white/5 min-h-[250px] text-base leading-relaxed p-6"
+                            className="bg-slate-950/40 border-white/5 min-h-[250px] text-base leading-relaxed p-6 text-white"
                             value={reportText}
                             onChange={(e) => setReportText(e.target.value)}
                           />
@@ -550,14 +550,17 @@ export default function NeuroVisionPage() {
                               <div className="relative z-10 flex flex-col gap-1">
                                 <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-[0.2em]">Verified Diagnosis</span>
                                 <h3 className="text-3xl font-black text-white leading-tight">
-                                  {result.disease || (result.classifications?.brain_tumor?.disease) || "Analysis Finalized"}
+                                  {result.disease || 
+                                   (result.classifications?.brain_tumor?.disease) || 
+                                   (getConfidencePairs(result)[0]?.[0]?.replace(/_/g, " ") || "No Anomalies Detected")}
                                 </h3>
                                 <div className="mt-4 flex items-end justify-between">
                                    <div className="flex flex-col">
                                       <span className="text-[10px] uppercase text-slate-400 font-bold tracking-widest leading-none">Conf. Score</span>
                                       <span className="text-4xl font-extrabold text-emerald-400">
                                          {result.confidence ? `${(result.confidence * 100).toFixed(1)}%` : 
-                                          result.classifications?.brain_tumor?.confidence ? `${(result.classifications.brain_tumor.confidence * 100).toFixed(1)}%` : "N/A"}
+                                          result.classifications?.brain_tumor?.confidence ? `${(result.classifications.brain_tumor.confidence * 100).toFixed(1)}%` : 
+                                          getConfidencePairs(result)[0] ? `${(getConfidencePairs(result)[0][1] * 100).toFixed(1)}%` : "N/A"}
                                       </span>
                                    </div>
                                    <div className="bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-500/20">

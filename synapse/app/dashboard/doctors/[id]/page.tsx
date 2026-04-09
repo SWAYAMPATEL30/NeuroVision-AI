@@ -24,6 +24,7 @@ import {
   ChevronLeft, ArrowRight, CheckCircle 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/lib/auth';
 
 interface PageProps {
   params: { id: string };
@@ -42,6 +43,7 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export default function DoctorProfilePage({ params }: PageProps) {
+  const { user } = useAuth();
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [loading, setLoading] = useState(true);
   const [showBooking, setShowBooking] = useState(false);
@@ -328,6 +330,7 @@ export default function DoctorProfilePage({ params }: PageProps) {
             aiReport=""
             scanType="General Consultation"
             uploadedFileName=""
+            patientName={user?.name || "Patient"}
             onClose={() => setShowBooking(false)}
           />
         )}

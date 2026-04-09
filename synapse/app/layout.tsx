@@ -10,7 +10,7 @@ import { AuthProvider } from '@/lib/auth'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Synapse - AI-Powered Learning Platform',
+  title: 'NeuroVision AI - AI-Powered Learning Platform',
   description: 'An AI-powered learning platform with dyslexia-friendly features',
 }
 
@@ -22,12 +22,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <style>
-          {`
-            @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Geist:wght@100..900&family=Monomakh&display=swap');
-          `}
-        </style>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Geist:wght@100..900&family=Monomakh&display=swap" 
+          rel="stylesheet" 
+        />
         <script
+
           dangerouslySetInnerHTML={{
             __html: `
               (function() {

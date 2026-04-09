@@ -18,7 +18,8 @@ import {
   Stethoscope,
   Users,
   TrendingUp,
-  BookOpen
+  BookOpen,
+  Sparkles
 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
@@ -58,9 +59,9 @@ interface AnalysisResult {
 
 // Mock localStorage data for demonstration
 const mockStorageData = {
-  synapse_gad7: "1",
-  synapse_phq12: "24", 
-  synapse_phq9: "23"
+  neurovision_gad7: "1",
+  neurovision_phq12: "24", 
+  neurovision_phq9: "23"
 };
 
 export default function MentalHealthPlanner() {
@@ -109,9 +110,9 @@ export default function MentalHealthPlanner() {
   useEffect(() => {
     const loadScores = () => {
       try {
-        const phq9 = parseInt(mockStorageData.synapse_phq9);
-        const phq12 = parseInt(mockStorageData.synapse_phq12);
-        const gad7 = parseInt(mockStorageData.synapse_gad7);
+        const phq9 = parseInt(mockStorageData.neurovision_phq9);
+        const phq12 = parseInt(mockStorageData.neurovision_phq12);
+        const gad7 = parseInt(mockStorageData.neurovision_gad7);
         
         setScores({ phq9, phq12, gad7 });
         setScoresLoaded(true);
@@ -236,15 +237,58 @@ export default function MentalHealthPlanner() {
           </Card>
         )}
 
+        {/* Assessment Options */}
+        <Card className="border-2 border-indigo-200 shadow-xl bg-white overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-indigo-50 to-blue-50 border-b border-indigo-100">
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-2xl font-bold text-indigo-900">Take New Assessment</CardTitle>
+                <CardDescription className="text-indigo-700">
+                  Update your scores by taking a professional health screening
+                </CardDescription>
+              </div>
+              <Sparkles className="w-8 h-8 text-indigo-600 animate-pulse" />
+            </div>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <a href="/eval_game2" className="group">
+                <div className="h-full p-4 rounded-2xl border-2 border-slate-100 hover:border-red-200 hover:bg-red-50 transition-all text-center">
+                  <Heart className="w-10 h-10 text-red-500 mx-auto mb-3 group-hover:scale-110 transition-transform" />
+                  <h3 className="font-bold text-slate-900">Depression (PHQ-9)</h3>
+                  <p className="text-xs text-slate-500 mt-2 italic shadow-blue-50">9 Questions • ~3 mins</p>
+                </div>
+              </a>
+              <a href="/eval_game3" className="group">
+                <div className="h-full p-4 rounded-2xl border-2 border-slate-100 hover:border-green-200 hover:bg-green-50 transition-all text-center">
+                  <AlertTriangle className="w-10 h-10 text-green-500 mx-auto mb-3 group-hover:scale-110 transition-transform" />
+                  <h3 className="font-bold text-slate-900">Anxiety (GAD-7)</h3>
+                  <p className="text-xs text-slate-500 mt-2 italic">7 Questions • ~2 mins</p>
+                </div>
+              </a>
+              <a href="/eval_game1" className="group">
+                <div className="h-full p-4 rounded-2xl border-2 border-slate-100 hover:border-blue-200 hover:bg-blue-50 transition-all text-center">
+                  <Brain className="w-10 h-10 text-blue-500 mx-auto mb-3 group-hover:scale-110 transition-transform" />
+                  <h3 className="font-bold text-slate-900">Baseline Cognitive</h3>
+                  <p className="text-xs text-slate-500 mt-2 italic">MMSE-Style • ~10 mins</p>
+                </div>
+              </a>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Current Scores Display */}
-        <Card className="border-2 border-blue-200 shadow-lg">
+        <Card className="border-2 border-blue-200 shadow-lg relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-2">
+            <Badge variant="outline" className="bg-white/50 backdrop-blur-sm">LAST VIEWED</Badge>
+          </div>
           <CardHeader>
             <CardTitle className="flex items-center">
               <Activity className="w-6 h-6 mr-2 text-blue-600" />
               Your Current Assessment Scores
             </CardTitle>
             <CardDescription>
-              Loaded from stored assessment data
+              Scores below are for reference. Use the buttons above to start a new exam.
             </CardDescription>
           </CardHeader>
           <CardContent>

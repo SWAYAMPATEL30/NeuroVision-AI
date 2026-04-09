@@ -43,8 +43,8 @@ export default function Page() {
                 </header>
                 <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
                     <iframe
-                        src="https://framevr.io/synapseeeee"
-                        title="FrameVR Synapse"
+                        src="https://framevr.io/neurovision"
+                        title="FrameVR NeuroVision"
                         className="w-full h-[90vh] rounded-lg border"
                         allow="microphone; camera; fullscreen; autoplay"
                     />

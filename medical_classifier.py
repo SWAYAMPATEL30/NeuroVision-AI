@@ -1115,14 +1115,32 @@ class MedicalClassifier:
                         best_confidence = conf
                         best_prediction = diagnosis
                         best_model = "MedGemma-27b-it"
-                        full_analysis = medgemma.get("full_analysis", "")
+                        # ALWAYS keep the MedSigLIP Top 5 if they exist
+                        medsiglip_top5 = ""
+                        if "medsiglip" in analysis_results:
+                            m_preds = analysis_results["medsiglip"].get("predictions", {})
+                            if m_preds:
+                                medsiglip_top5 = "\nTop 5 Model Predictions (MedSigLIP):\n"
+                                sorted_m = sorted(m_preds.items(), key=lambda x: x[1], reverse=True)[:5]
+                                for d, s in sorted_m:
+                                    medsiglip_top5 += f"  - {d}: {s:.1%}\n"
+                        full_analysis = medgemma.get("full_analysis", "") + medsiglip_top5
             elif "primary_diagnosis" in medgemma:
                 conf = 0.85
                 if conf > best_confidence:
                     best_confidence = conf
                     best_prediction = medgemma["primary_diagnosis"]
                     best_model = "MedGemma-27b-it"
-                    full_analysis = medgemma.get("full_analysis", "")
+                    # ALWAYS keep the MedSigLIP Top 5 if they exist
+                    medsiglip_top5 = ""
+                    if "medsiglip" in analysis_results:
+                        m_preds = analysis_results["medsiglip"].get("predictions", {})
+                        if m_preds:
+                            medsiglip_top5 = "\nTop 5 Model Predictions (MedSigLIP):\n"
+                            sorted_m = sorted(m_preds.items(), key=lambda x: x[1], reverse=True)[:5]
+                            for d, s in sorted_m:
+                                medsiglip_top5 += f"  - {d}: {s:.1%}\n"
+                    full_analysis = medgemma.get("full_analysis", "") + medsiglip_top5
             elif "full_analysis" in medgemma:
                 diagnosis = self._extract_diagnosis_from_text(medgemma["full_analysis"])
                 conf = 0.85
@@ -1130,7 +1148,16 @@ class MedicalClassifier:
                     best_confidence = conf
                     best_prediction = diagnosis
                     best_model = "MedGemma-27b-it"
-                    full_analysis = medgemma["full_analysis"]
+                    # ALWAYS keep the MedSigLIP Top 5 if they exist
+                    medsiglip_top5 = ""
+                    if "medsiglip" in analysis_results:
+                        m_preds = analysis_results["medsiglip"].get("predictions", {})
+                        if m_preds:
+                            medsiglip_top5 = "\nTop 5 Model Predictions (MedSigLIP):\n"
+                            sorted_m = sorted(m_preds.items(), key=lambda x: x[1], reverse=True)[:5]
+                            for d, s in sorted_m:
+                                medsiglip_top5 += f"  - {d}: {s:.1%}\n"
+                    full_analysis = medgemma["full_analysis"] + medsiglip_top5
         
         # Final result
         if best_prediction is None:
@@ -1290,7 +1317,7 @@ class MedicalClassifier:
             
             if best_model_info:
                 prompt += f"PRIMARY FINDING: {best_model_info.get('disease', 'N/A')} ({best_model_info.get('confidence', 0):.1%} confidence)\n"
-                prompt += f"MODEL USED: {best_model_info.get('model', 'Synapse AI')}\n\n"
+                prompt += f"MODEL USED: {best_model_info.get('model', 'NeuroVision AI')}\n\n"
             
             if text_input:
                 prompt += f"CLINICAL HISTORY: {text_input}\n\n"

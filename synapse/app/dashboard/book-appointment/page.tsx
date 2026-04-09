@@ -16,7 +16,7 @@ import { useDoctors } from "@/features/appointments/hooks/useDoctors";
 import { bookAppointment } from "@/features/appointments/services/bookingApi";
 import { Doctor } from "@/features/appointments/types/doctor";
 
-const BOOKING_KEY = "synapse-all-bookings";
+const BOOKING_KEY = "neurovision-all-bookings";
 
 const TIME_SLOTS = [
   "09:00 AM", "10:30 AM", "11:00 AM", "12:30 PM",

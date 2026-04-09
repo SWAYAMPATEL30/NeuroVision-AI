@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  Synapse Medical AI Platform
+  NeuroVision AI Platform
   <br>
 </h1>
 
@@ -18,9 +18,9 @@
 
 ## Overview
 
-**Synapse Medical AI** is a production-ready, comprehensive digital health system designed to bridge the gap between advanced artificial intelligence and everyday primary care. Combining 24/7 intelligent virtual assistants, real-time clinical diagnostics (MRI/X-Ray analysis), and seamless telemedicine integration, Synapse brings world-class medicine to everyone's fingertips.
+**NeuroVision AI** is a production-ready, comprehensive digital health system designed to bridge the gap between advanced artificial intelligence and everyday primary care. Combining 24/7 intelligent virtual assistants, real-time clinical diagnostics (MRI/X-Ray analysis), and seamless telemedicine integration, NeuroVision AI brings world-class medicine to everyone's fingertips.
 
-Previously a niche prototype, Synapse has evolved into a robust, high-performance platform capable of handling complete patient lifecycles — from initial symptom triaging using Large Language Models to clinical image verification by board-verified doctors.
+Previously a niche prototype, NeuroVision AI has evolved into a robust, high-performance platform capable of handling complete patient lifecycles — from initial symptom triaging using Large Language Models to clinical image verification by board-verified doctors.
 
 ## Key Features
 
@@ -51,7 +51,7 @@ To run the full platform locally, you will need to start both the Python backend
 Ensure you have Python 3.9+ installed.
 
 ```bash
-cd synapse/backend  # If applicable, or root
+cd NeuroVision AI/backend  # If applicable, or root
 pip install -r requirements.txt
 python api.py
 ```
@@ -62,12 +62,12 @@ python api.py
 Ensure you have Node.js 18+ installed.
 
 ```bash
-cd synapse
+cd NeuroVision AI
 npm install
 ```
 
 **Environment Variables**
-Create a `.env.local` file in the `synapse` directory with your required keys:
+Create a `.env.local` file in the `NeuroVision AI` directory with your required keys:
 ```env
 NEXT_PUBLIC_HF_TOKEN=hf_your_token_here
 OPENAI_API_KEY=sk-your_token_here
@@ -89,7 +89,7 @@ npm run dev
 By leveraging PyTorch, the platform supports real-time inference on multiple model weights. Scans uploaded by patients are sent to the FastAPI service, where the image is processed and a clinical summary is generated in a downloadable report format using structured language generation.
 
 ### 2. Video Calling (WebRTC / Streams)
-Synapse properly handles dynamic Next.js 15 route parameters (using `React.use()` for `params`) to ensure seamless transition from the Patient Dashboard directly into secure WebRTC Video Consultation sessions.
+NeuroVision AI properly handles dynamic Next.js 15 route parameters (using `React.use()` for `params`) to ensure seamless transition from the Patient Dashboard directly into secure WebRTC Video Consultation sessions.
 
 ### 3. Voice IA & MedBot
 The Chatbot uses LangChain-style prompts to enforce disclaimers ("I am an AI, not a substitute for a doctor") while safely analyzing the user's text. This ensures a human-like, instantaneous triage process.

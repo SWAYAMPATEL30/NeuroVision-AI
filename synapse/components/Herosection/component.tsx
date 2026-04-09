@@ -1,10 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import {  lazy } from 'react'
+import React, { useEffect, useRef, useState, Suspense, lazy } from 'react';
 import { useRouter } from 'next/navigation';
 const Spline = lazy(() => import('@splinetool/react-spline'))
-
 
 function HeroSplineBackground() {
   return (
@@ -14,15 +12,21 @@ function HeroSplineBackground() {
       height: '100vh',
       pointerEvents: 'auto',
       overflow: 'hidden',
-    }}>
-      <Spline
-        style={{
-          width: '100%',
-          height: '100vh',
-          pointerEvents: 'auto',
-        }}
-        scene="https://prod.spline.design/us3ALejTXl6usHZ7/scene.splinecode"
-      />
+    }} className="bg-slate-950">
+      <Suspense fallback={
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-950">
+           <div className="w-16 h-16 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin" />
+        </div>
+      }>
+        <Spline
+          style={{
+            width: '100%',
+            height: '100vh',
+            pointerEvents: 'auto',
+          }}
+          scene="https://prod.spline.design/us3ALejTXl6usHZ7/scene.splinecode"
+        />
+      </Suspense>
       <div
         style={{
           position: 'absolute',
@@ -45,19 +49,19 @@ function HeroContent() {
   const router = useRouter();
 
   return (
-    <div className="text-left text-white pt-20 sm:pt-28 md:pt-36 px-4 max-w-5xl">
-      <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight tracking-tight">
+    <div className="text-left text-white px-4 max-w-5xl">
+      <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight tracking-tight">
         The future of primary care is{' '}
         <span className="bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 bg-clip-text text-transparent">
           intelligent.
         </span>
       </h1>
 
-      <p className="text-lg sm:text-xl md:text-2xl mb-8 opacity-90 max-w-3xl leading-relaxed font-medium">
-        Synapse is a comprehensive, AI-powered health system. From clinical diagnostics like MRI and X-Ray analysis to 24/7 intelligent empathetic care, we bring world-class medicine to your fingertips.
+      <p className="text-base sm:text-lg md:text-xl mb-4 opacity-90 max-w-2xl leading-relaxed font-medium">
+        NeuroVision AI is a comprehensive, AI-powered health system. From clinical diagnostics like MRI and X-Ray analysis to 24/7 intelligent empathetic care, we bring world-class medicine to your fingertips.
       </p>
 
-      <div className="mb-10 max-w-4xl">
+      <div className="mb-6 max-w-4xl">
         <p className="text-base sm:text-lg md:text-xl opacity-85 leading-relaxed">
           Skip the waiting room. Chat with our intelligent Medical Assistant, book instant clinical video consultations, or get instant AI-driven radiology reports. 
         </p>
@@ -65,10 +69,10 @@ function HeroContent() {
 
       <div className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-6">
         <a
-          href="/auth"
+          href="/register"
           className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 px-8 rounded-full text-base transition-all duration-300 transform hover:scale-105 pointer-events-auto shadow-lg shadow-emerald-500/20"
         >
-          Join Synapse Today
+          Join NeuroVision AI Today
         </a>
         <a
           href="/dashboard"
@@ -113,7 +117,7 @@ function Navbar() {
       <div className="container mx-auto px-4 py-4 md:px-6 lg:px-8 flex items-center justify-between">
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="text-white font-black text-2xl tracking-tighter bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-            synapse++
+            NeuroVision AI++
           </div>
           <div className="hidden lg:flex items-center space-x-6 text-sm text-gray-300 font-medium">
              <a href="#services" className="hover:text-white transition-colors">Services</a>
@@ -123,8 +127,8 @@ function Navbar() {
         </div>
 
         <div className="flex items-center space-x-4 md:space-x-6">
-          <a href="/auth" className="hidden lg:block text-white font-semibold text-sm hover:text-emerald-400 transition-colors">Log In</a>
-          <a href="/dashboard" className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-5 rounded-full text-sm md:text-base transition-all duration-300">
+          <a href="/login" className="hidden lg:block text-white font-semibold text-sm hover:text-emerald-400 transition-colors">Log In</a>
+          <a href="/login" className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-5 rounded-full text-sm md:text-base transition-all duration-300">
             Secure Member Login
           </a>
           <button className="lg:hidden text-white p-2" onClick={toggleMobileMenu} aria-label="Toggle mobile menu">
@@ -240,7 +244,7 @@ export const HeroSection = () => {
         </section>
 
         <footer className="border-t border-white/5 py-12 text-center text-slate-500">
-          <p>© {new Date().getFullYear()} Synapse Medical AI. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} NeuroVision AI. All rights reserved.</p>
         </footer>
       </main>
     </div>

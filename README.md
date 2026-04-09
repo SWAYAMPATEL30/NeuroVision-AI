@@ -1,8 +1,8 @@
-# Synapse Medical AI Platform 🏥
+# NeuroVision AI Platform 🏥
 
-Synapse is a next-generation medical diagnostic platform that combines specialized deep learning models with state-of-the-art LLMs (**Groq** & **Google Gemini**) to provide automated radiological screening and clinical report generation.
+NeuroVision AI is a next-generation medical diagnostic platform that combines specialized deep learning models with state-of-the-art LLMs (**Groq** & **Google Gemini**) to provide automated radiological screening and clinical report generation.
 
-![Synapse UI](https://github.com/SWAYAMPATEL30/MedAI/raw/main/synapse/public/dashboard-preview.png)
+![NeuroVision AI UI](https://github.com/SWAYAMPATEL30/MedAI/raw/main/NeuroVision AI/public/dashboard-preview.png)
 
 ## 🚀 Key Features
 
@@ -49,7 +49,7 @@ Synapse is a next-generation medical diagnostic platform that combines specializ
    ```
 
 ### 3. Frontend Setup
-1. Navigate to the `synapse/` directory.
+1. Navigate to the `NeuroVision AI/` directory.
 2. Install dependencies:
    ```bash
    npm install

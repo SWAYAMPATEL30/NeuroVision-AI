@@ -25,7 +25,7 @@ function buildGoogleCalendarUrl(appt: Appointment): string {
   const params = new URLSearchParams();
   const modeLabel = MODE_LABELS[appt.mode].label;
   params.set('text', `${modeLabel} with ${appt.doctorName}`);
-  params.set('details', `NeuroVision Synapse appointment. ${appt.aiReport ? 'AI Report attached.' : ''}`);
+  params.set('details', `NeuroVision AI appointment. ${appt.aiReport ? 'AI Report attached.' : ''}`);
   if (appt.clinicAddress && appt.mode === 'offline') params.set('location', appt.clinicAddress);
   
   // Build date

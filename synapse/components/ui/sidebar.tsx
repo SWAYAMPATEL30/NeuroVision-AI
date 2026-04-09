@@ -347,9 +347,9 @@ function SidebarFooter({ className, children, ...props }: React.ComponentProps<"
   useEffect(() => {
     if (typeof window === "undefined") return
     try {
-      const phq9 = JSON.parse(window.localStorage.getItem("synapse_phq9") || "null")
-      const phq12 = JSON.parse(window.localStorage.getItem("synapse_phq12") || "null")
-      const gad7 = JSON.parse(window.localStorage.getItem("synapse_gad7") || "null")
+      const phq9 = JSON.parse(window.localStorage.getItem("neurovision_phq9") || "null")
+      const phq12 = JSON.parse(window.localStorage.getItem("neurovision_phq12") || "null")
+      const gad7 = JSON.parse(window.localStorage.getItem("neurovision_gad7") || "null")
       setScores({ phq9, phq12, gad7 })
     } catch {
       setScores(undefined)

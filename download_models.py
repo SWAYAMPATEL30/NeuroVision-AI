@@ -28,7 +28,7 @@ LOCAL_MODELS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "hf_
 os.makedirs(LOCAL_MODELS_DIR, exist_ok=True)
 
 print("=" * 60)
-print("  Synapse Medical AI — Model Downloader")
+print("  NeuroVision AI — Model Downloader")
 print("=" * 60)
 print(f"  Models will be saved to: {LOCAL_MODELS_DIR}")
 print(f"  HF Token: {'✅ Found' if HF_TOKEN else '❌ Missing (some models may fail)'}")

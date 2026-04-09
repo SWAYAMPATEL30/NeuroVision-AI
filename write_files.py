@@ -1,9 +1,9 @@
 import os, pathlib
 
-SYNAPSE = pathlib.Path(r"c:\Users\ipate\OneDrive\Documents\try\synapse")
+NeuroVision AI = pathlib.Path(r"c:\Users\ipate\OneDrive\Documents\try\NeuroVision AI")
 
 # ---- 1. CHATBOT PAGE ----
-chatbot_dir = SYNAPSE / "app" / "dashboard" / "chatbot"
+chatbot_dir = NeuroVision AI / "app" / "dashboard" / "chatbot"
 chatbot_dir.mkdir(parents=True, exist_ok=True)
 
 chatbot = r'''
@@ -24,7 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { Send, Trash2, Bot, Sparkles, Loader2, HeartPulse } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const STORAGE_KEY = "synapse-chatbot-history";
+const STORAGE_KEY = "neurovision-chatbot-history";
 
 interface Message {
   id: string;
@@ -53,7 +53,7 @@ async function callChatAI(userMessage: string, history: Message[]): Promise<stri
     .join("\n");
 
   const prompt =
-    "<|system|>\nYou are MedBot, a medical assistant in Synapse. Help patients with health questions. " +
+    "<|system|>\nYou are MedBot, a medical assistant in NeuroVision AI. Help patients with health questions. " +
     "Always recommend consulting a doctor. Be concise, empathetic, and clear.\n</|system|>\n" +
     (contextLines ? contextLines + "\n" : "") +
     "User: " + userMessage + "\nMedBot:";
@@ -309,7 +309,7 @@ export default function ChatbotPage() {
 print("Chatbot page written!")
 
 # ---- 2. DOCTOR SUB-PAGES ----
-doctor_dir = SYNAPSE / "app" / "doctor"
+doctor_dir = NeuroVision AI / "app" / "doctor"
 
 # Patients page
 patients_dir = doctor_dir / "patients"
@@ -431,7 +431,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CalendarDays, Clock, Video, MapPin, CheckCircle2, XCircle } from "lucide-react";
 
-const BOOKING_KEY = "synapse-all-bookings";
+const BOOKING_KEY = "neurovision-all-bookings";
 
 interface Booking {
   id: string;
@@ -453,7 +453,7 @@ export default function DoctorAppointmentsPage() {
       if (stored) setBookings(JSON.parse(stored));
     } catch {}
     // BroadcastChannel: real-time updates across tabs
-    const bc = typeof BroadcastChannel !== "undefined" ? new BroadcastChannel("synapse-bookings") : null;
+    const bc = typeof BroadcastChannel !== "undefined" ? new BroadcastChannel("neurovision-bookings") : null;
     if (bc) {
       bc.onmessage = () => {
         try {

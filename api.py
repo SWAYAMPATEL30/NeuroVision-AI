@@ -142,27 +142,43 @@ Include a standard radiological disclaimer at the end."""
             "Authorization": f"Bearer {GROQ_API_KEY}",
             "Content-Type": "application/json"
         }
-        payload = {
-            "model": "llama-3.3-70b-versatile",
-            "messages": [
-                {"role": "system", "content": "You are a specialized medical documentation AI for Synapse Medical AI."},
-                {"role": "user", "content": prompt}
-            ],
-            "temperature": 0.3, # Lower temperature for clinical consistency
-            "max_tokens": 1500
-        }
-
+        
+        # List of models to try in order of preference
+        models_to_try = [
+            "llama-3.3-70b-versatile",
+            "llama-3.1-70b-versatile",
+            "mixtral-8x7b-32768",
+            "llama3-70b-8192"
+        ]
+        
+        last_error = "Unknown error"
         async with httpx.AsyncClient() as client:
-            print(f"[AI] Calling Groq API for Report: {patient_name}...")
-            resp = await client.post(url, headers=headers, json=payload, timeout=30.0)
+            for model in models_to_try:
+                try:
+                    payload = {
+                        "model": model,
+                        "messages": [
+                            {"role": "system", "content": "You are a specialized medical documentation AI for NeuroVision AI."},
+                            {"role": "user", "content": prompt}
+                        ],
+                        "temperature": 0.3, # Lower temperature for clinical consistency
+                        "max_tokens": 1500
+                    }
+                    print(f"[AI] Calling Groq API with model {model} for Report: {patient_name}...")
+                    resp = await client.post(url, headers=headers, json=payload, timeout=30.0)
+                    
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        print(f"[AI] Groq Report Generated Successfully (Model: {model}).")
+                        return data['choices'][0]['message']['content']
+                    else:
+                        print(f"[WARN] Groq model {model} failed: {resp.status_code}")
+                        last_error = f"Groq API {resp.status_code}: {resp.text}"
+                except Exception as e:
+                    print(f"[WARN] Groq model {model} exception: {str(e)}")
+                    last_error = str(e)
             
-            if resp.status_code == 200:
-                data = resp.json()
-                print(f"[AI] Groq Report Generated Successfully.")
-                return data['choices'][0]['message']['content']
-            else:
-                print(f"[ERROR] Groq Report API error: {resp.status_code} - {resp.text}")
-                raise Exception(f"Groq API Status {resp.status_code}")
+            raise Exception(f"All Groq models failed. Last error: {last_error}")
 
     except Exception as e:
         print(f"[ERROR] Groq Report Generation failed: {str(e)}")
@@ -220,7 +236,7 @@ Age:            {patient_age}
 Gender:         {patient_gender}
 Report ID:      {patient_id}
 Study Date:     {date}
-Facility:       Synapse Medical AI Diagnostics Center
+Facility:       NeuroVision AI Diagnostics Center
 Referring:      AI-Assisted Screening System
 
 CLINICAL INDICATION
@@ -232,7 +248,7 @@ TECHNIQUE
 ---------
 Digital image analysis using deep learning neural network ensemble
 (InceptionV3/ResNet50/DenseNet architecture).
-Processing: Synapse Medical AI v1.0 — Automated Diagnostic Pipeline.
+Processing: NeuroVision AI v1.0 — Automated Diagnostic Pipeline.
 
 FINDINGS
 --------
@@ -262,7 +278,7 @@ RECOMMENDATIONS
 QUALITY ASSURANCE
 -----------------
 AI Model Confidence: {confidence:.1f}% — {'Meets diagnostic threshold.' if confidence > 70 else 'Below standard threshold; additional review required.'}
-Processed by: Synapse Medical AI v1.0
+Processed by: NeuroVision AI v1.0
 Report generated: {date}
 
 ---
@@ -272,7 +288,7 @@ a confirmed medical diagnosis. All findings must be reviewed and
 validated by a qualified, licensed healthcare professional before any
 clinical decisions are made.
 
-Signed: Synapse AI Diagnostic System
+Signed: NeuroVision AI Diagnostic System
 Report ID: {patient_id}
 """
 
@@ -348,7 +364,7 @@ def generate_pdf_bytes(report_text: str, title: str, disease: str, confidence: f
 
         # ── Header Banner ──────────────────────────────────────────────────────────────
         header_data = [
-            [Paragraph('SYNAPSE MEDICAL AI', title_style)],
+            [Paragraph('NeuroVision AI', title_style)],
             [Paragraph('AI-Powered Clinical Diagnostic Report', subtitle_style)],
         ]
         header_table = Table(header_data, colWidths=[18*cm])
@@ -400,7 +416,7 @@ def generate_pdf_bytes(report_text: str, title: str, disease: str, confidence: f
                          ParagraphStyle('SC', fontName='Helvetica', fontSize=9.5, textColor=navy, alignment=TA_CENTER)),
                 Paragraph(f'<b>Report Date</b><br/><font size=10>{datetime.now().strftime("%d %b %Y")}</font><br/><font size=7>{datetime.now().strftime("%H:%M IST")}</font>',
                          ParagraphStyle('SR', fontName='Helvetica', fontSize=9.5, textColor=navy, alignment=TA_CENTER)),
-                Paragraph(f'<b>System</b><br/><font size=10>Synapse AI v1.0</font><br/><font size=7>Neural Ensemble</font>',
+                Paragraph(f'<b>System</b><br/><font size=10>NeuroVision AI v1.0</font><br/><font size=7>Neural Ensemble</font>',
                          ParagraphStyle('SM', fontName='Helvetica', fontSize=9.5, textColor=navy, alignment=TA_CENTER)),
             ]
         ]
@@ -448,7 +464,7 @@ def generate_pdf_bytes(report_text: str, title: str, disease: str, confidence: f
         ))
         story.append(Spacer(1, 0.15*cm))
         story.append(Paragraph(
-            f'Generated by Synapse Medical AI \u2022 {datetime.now().strftime("%d %B %Y, %H:%M")} '
+            f'Generated by NeuroVision AI \u2022 {datetime.now().strftime("%d %B %Y, %H:%M")} '
             f'\u2022 Report ID: {patient_id} \u2022 CONFIDENTIAL',
             disclaimer_style
         ))
@@ -829,7 +845,7 @@ async def download_report(
             patient_id=patient_id,
         )
         
-        filename = f"Synapse_Medical_Report_{scan_type.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
+        filename = f"NeuroVision AI_Medical_Report_{scan_type.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
 
         return StreamingResponse(
             io.BytesIO(pdf_bytes),
@@ -863,7 +879,7 @@ async def get_pdf_report_legacy(results: dict):
 async def ai_chat(
     message: str = Form(...),
     history: Optional[str] = Form("[]"),
-    system_prompt: Optional[str] = Form("You are a helpful AI assistant for Synapse Medical."),
+    system_prompt: Optional[str] = Form("You are a helpful AI assistant for NeuroVision AI."),
 ):
     """
     Direct AI chat endpoint using Groq (llama-3.3-70b-versatile).
@@ -892,50 +908,154 @@ async def ai_chat(
             messages.append({"role": turn.get("role", "user"), "content": turn.get("text", turn.get("content", ""))})
         messages.append({"role": "user", "content": message})
         
+        # List of models to try in order of preference for chat
+        models_to_try = [
+            "llama-3.3-70b-versatile",
+            "llama-3.1-70b-versatile",
+            "llama-3.1-8b-instant",
+            "mixtral-8x7b-32768",
+            "gemma2-9b-it"
+        ]
+        
+        last_error = "Unknown error"
         url = "https://api.groq.com/openai/v1/chat/completions"
         headers = {
             "Authorization": f"Bearer {GROQ_API_KEY}",
             "Content-Type": "application/json"
         }
-        payload = {
-            "model": "llama-3.3-70b-versatile",
-            "messages": messages,
-            "max_tokens": 1000,
-            "temperature": 0.7
-        }
         
         async with httpx.AsyncClient() as client:
-            resp = await client.post(url, headers=headers, json=payload, timeout=20.0)
-            if resp.status_code == 200:
-                data = resp.json()
-                return {"response": data['choices'][0]['message']['content']}
-            else:
-                print(f"[ERROR] Groq API error: {resp.text}")
-                raise Exception(f"Groq error: {resp.status_code}")
+            for model in models_to_try:
+                try:
+                    payload = {
+                        "model": model,
+                        "messages": messages,
+                        "max_tokens": 1000,
+                        "temperature": 0.7
+                    }
+                    resp = await client.post(url, headers=headers, json=payload, timeout=20.0)
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        return {"response": data['choices'][0]['message']['content']}
+                    else:
+                        print(f"[WARN] Groq chat model {model} failed: {resp.status_code}")
+                        last_error = f"Groq API {resp.status_code}"
+                except Exception as e:
+                    print(f"[WARN] Groq chat model {model} exception: {str(e)}")
+                    last_error = str(e)
+            
+            raise Exception(f"All Groq chat models failed. Last error: {last_error}")
 
     except Exception as e:
         print(f"AI Chat error: {e}")
-        return {"response": f"I'm sorry, I'm having trouble connecting to my brain right now. Please try again. (Mode: Groq)"}
+        return {"response": "I'm having a brief connection issue with my AI core. I can still help you with basic questions, but for complex medical analysis, please try again in a few minutes."}
 
 
 
-@app.post("/process-csv-files")
-async def process_csv_files(
-    user_id: str = Form(...),
-    csv_file_1: Optional[UploadFile] = File(None),
-    csv_file_2: Optional[UploadFile] = File(None),
-    audio_file: Optional[UploadFile] = File(None)
-):
-    await asyncio.sleep(2)
-    return {
-        "status": "success", "message": "EEG files processed successfully",
-        "user_id": user_id,
-        "files_received": {
-            "csv1": csv_file_1.filename if csv_file_1 else None,
-            "csv2": csv_file_2.filename if csv_file_2 else None,
-            "audio": audio_file.filename if audio_file else None,
+@app.post("/analyze-scores")
+async def analyze_scores(data: dict):
+    """
+    Analyze mental health assessment scores and generate a personalized plan.
+    """
+    try:
+        phq9 = data.get("phq9", 0)
+        phq12 = data.get("phq12", 0)
+        gad7 = data.get("gad7", 0)
+        user_prompt = data.get("userPrompt", "")
+
+        # 1. Interpret scores (Clinical mapping)
+        def interpret_phq9(s):
+            if s >= 20: return {"score": s, "interpretation": "Severe Depression", "severity_level": "severe", "color": "destructive"}
+            if s >= 15: return {"score": s, "interpretation": "Moderately Severe Depression", "severity_level": "moderate-severe", "color": "warning"}
+            if s >= 10: return {"score": s, "interpretation": "Moderate Depression", "severity_level": "moderate", "color": "warning"}
+            if s >= 5: return {"score": s, "interpretation": "Mild Depression", "severity_level": "mild", "color": "secondary"}
+            return {"score": s, "interpretation": "Minimal Depression", "severity_level": "minimal", "color": "outline"}
+
+        def interpret_gad7(s):
+            if s >= 15: return {"score": s, "interpretation": "Severe Anxiety", "severity_level": "severe", "color": "destructive"}
+            if s >= 10: return {"score": s, "interpretation": "Moderate Anxiety", "severity_level": "moderate", "color": "warning"}
+            if s >= 5: return {"score": s, "interpretation": "Mild Anxiety", "severity_level": "mild", "color": "secondary"}
+            return {"score": s, "interpretation": "Minimal Anxiety", "severity_level": "minimal", "color": "outline"}
+
+        def interpret_phq12(s):
+            if s >= 15: return {"score": s, "interpretation": "High Somatic Symptoms", "severity_level": "severe", "color": "destructive"}
+            if s >= 10: return {"score": s, "interpretation": "Medium Somatic Symptoms", "severity_level": "moderate", "color": "warning"}
+            return {"score": s, "interpretation": "Low Somatic Symptoms", "severity_level": "minimal", "color": "outline"}
+
+        scores_summary = {
+            "phq9": interpret_phq9(phq9),
+            "gad7": interpret_gad7(gad7),
+            "phq12": interpret_phq12(phq12)
         }
-    }
+
+        # Determine overall severity
+        max_score = max(phq9/27, gad7/21, phq12/24)
+        overall = "minimal"
+        if max_score > 0.8: overall = "critical"
+        elif max_score > 0.6: overall = "severe"
+        elif max_score > 0.4: overall = "moderate"
+        elif max_score > 0.2: overall = "mild"
+
+        # 2. Generate Recommendations via AI
+        import json
+        import httpx
+        
+        system_msg = "You are an AI Mental Health Assistant. Based on PHQ-9, GAD-7, and PHQ-12 scores, generate a structured JSON recommendation plan."
+        prompt = f"""
+        User Scores: PHQ-9 (Depression): {phq9}/27, GAD-7 (Anxiety): {gad7}/21, PHQ-12 (Somatic): {phq12}/24.
+        User Input: {user_prompt}
+        
+        Generate a personalized plan. Return ONLY a JSON object with this exact structure:
+        {{
+            "recommendation_sections": [
+                {{ "title": "Priority Steps", "content": ["step 1", "step 2"], "priority": "high", "icon": "alert" }},
+                {{ "title": "Lifestyle Changes", "content": ["..."], "priority": "medium", "icon": "lifestyle" }}
+            ],
+            "requires_immediate_attention": true/false (true if any score is severe),
+            "crisis_resources": ["Optional crisis number if needed"]
+        }}
+        """
+
+        plan = {
+            "recommendation_sections": [
+                { "title": "Initial Assessment", "content": ["Your scores indicate " + scores_summary["phq9"]["interpretation"] + "."], "priority": "medium", "icon": "assessment" },
+                { "title": "General Wellness", "content": ["Focus on consistent sleep and hydration."], "priority": "low", "icon": "lifestyle" }
+            ],
+            "requires_immediate_attention": max_score > 0.7,
+            "crisis_resources": ["988 Suicide & Crisis Lifeline"] if max_score > 0.7 else []
+        }
+
+        if GROQ_API_KEY:
+            try:
+                url = "https://api.groq.com/openai/v1/chat/completions"
+                headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
+                payload = {
+                    "model": "llama-3.1-8b-instant",
+                    "messages": [
+                        {"role": "system", "content": system_msg},
+                        {"role": "user", "content": prompt}
+                    ],
+                    "response_format": {"type": "json_object"}
+                }
+                async with httpx.AsyncClient() as client:
+                    resp = await client.post(url, headers=headers, json=payload, timeout=20.0)
+                    if resp.status_code == 200:
+                        ai_data = resp.json()
+                        content = json.loads(ai_data['choices'][0]['message']['content'])
+                        plan.update(content)
+            except Exception as e:
+                print(f"[AI] Error in score analysis: {e}")
+
+        return {
+            "success": True,
+            "scores": scores_summary,
+            "overall_severity": overall,
+            **plan
+        }
+
+    except Exception as e:
+        import traceback; traceback.print_exc()
+        return {"success": False, "error": str(e)}
 
 
 @app.get("/download-eeg-report/{user_id}")

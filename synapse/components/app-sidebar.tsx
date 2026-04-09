@@ -31,7 +31,7 @@ import { useUser } from "@/lib/UserContext"; // 🔥 import the hook
 const baseData = {
   teams: [
     {
-      name: "Synapse",
+      name: "NeuroVision AI",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
     },

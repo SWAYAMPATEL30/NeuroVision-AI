@@ -226,7 +226,7 @@ export default function CognitiveAssessment() {
       
       if (typeof window !== "undefined") {
         window.localStorage.setItem(
-          "synapse_cognitive_baseline",
+          "neurovision_cognitive_baseline",
           JSON.stringify({
             score: totalScore,
             maxScore: 25,

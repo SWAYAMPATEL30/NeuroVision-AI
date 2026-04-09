@@ -16,7 +16,8 @@ export function DoctorList({ onSelect, onViewProfile }: Props) {
   const [search, setSearch] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
-  useEffect(() => { load(); }, [load]);
+  // Removed redundant load() as useDoctors hook already has a mount effect
+  // useEffect(() => { load(); }, [load]);
 
   const filtered = doctors.filter(d =>
     search === '' ||

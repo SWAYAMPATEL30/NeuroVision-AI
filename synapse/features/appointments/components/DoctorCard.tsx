@@ -4,6 +4,7 @@ import React from 'react';
 import { Doctor } from '../types/doctor';
 import { Star, MapPin, Video, Building2, ArrowRight, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 interface Props {
   doctor: Doctor;
@@ -124,12 +125,12 @@ export function DoctorCard({ doctor, index, onSelect, onViewProfile }: Props) {
           <p className="text-base font-bold text-slate-100">₹{doctor.consultationFee}</p>
         </div>
           <div className="flex gap-2">
-          <a
+          <Link
             href={`/dashboard/doctors/${doctor.id}`}
             className="px-3 py-2 text-xs font-semibold text-slate-300 bg-slate-800 rounded-xl hover:bg-slate-700 transition-colors border border-white/5"
           >
             View Profile
-          </a>
+          </Link>
           <button
             onClick={() => onSelect(doctor)}
             className="px-4 py-2 text-xs font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-500 transition-colors flex items-center gap-1.5 shadow-lg shadow-blue-900/30"

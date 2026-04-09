@@ -22,7 +22,8 @@ import { BookingFlow } from "@/features/appointments/components/BookingFlow";
 import { useDoctors } from "@/features/appointments/hooks/useDoctors";
 import { useGeolocation } from "@/features/appointments/hooks/useGeolocation";
 import { Doctor } from "@/features/appointments/types/doctor";
-import { Stethoscope, List, Map as MapIcon } from 'lucide-react';
+import { useAuth } from "@/lib/auth";
+import { Stethoscope, List, Map as MapIcon } from "lucide-react";
 import { AnimatePresence } from 'framer-motion';
 
 export default function DoctorsPage() {
@@ -31,8 +32,10 @@ export default function DoctorsPage() {
   const [showBookingFlow, setShowBookingFlow] = useState(false);
   const { doctors, loading, load } = useDoctors();
   const { coords } = useGeolocation();
+  const { user } = useAuth();
 
-  useEffect(() => { load(); }, [load]);
+  // Redundant: useDoctors already has an effect that calls load()
+  // useEffect(() => { load(); }, [load]);
 
   const handleSelect = (doc: Doctor) => {
     setBookingDoctor(doc);
@@ -116,9 +119,10 @@ export default function DoctorsPage() {
       <AnimatePresence>
         {showBookingFlow && (
           <BookingFlow
-            aiReport=""
+            aiReport="General clinical consultation requested via dashboard."
             scanType="General Consultation"
             uploadedFileName=""
+            patientName={user?.name || "Patient"}
             onClose={() => { setShowBookingFlow(false); setBookingDoctor(null); }}
           />
         )}

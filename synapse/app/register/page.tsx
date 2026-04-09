@@ -118,7 +118,7 @@ export default function RegisterPage() {
         <div className="max-w-2xl mx-auto space-y-8">
           <div>
             <h2 className="text-3xl font-bold">Create Account</h2>
-            <p className="text-slate-500 dark:text-slate-400 mt-1">Join Synapse to access AI screening and healthcare tools</p>
+            <p className="text-slate-500 dark:text-slate-400 mt-1">Join NeuroVision AI to access AI screening and healthcare tools</p>
           </div>
 
           <div className="flex p-1 bg-slate-200 dark:bg-slate-800/50 rounded-xl">

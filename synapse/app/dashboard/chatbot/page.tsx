@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Send, Trash2, Bot, Sparkles, Loader2, HeartPulse } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const STORAGE_KEY = "synapse-chatbot-history";
+const STORAGE_KEY = "neurovision-chatbot-history";
 
 interface Message {
   id: string;
@@ -38,7 +38,7 @@ function getFallbackReply(msg: string): string {
 }
 
 async function callChatAI(userMessage: string, history: Message[]): Promise<string> {
-  const systemPrompt = "You are MedBot, a medical assistant in Synapse. Help patients with health questions. Always recommend consulting a doctor. Be concise, empathetic, and clear.";
+  const systemPrompt = "You are MedBot, a medical assistant in NeuroVision AI. Help patients with health questions. Always recommend consulting a doctor. Be concise, empathetic, and clear.";
 
   try {
     const formData = new FormData();

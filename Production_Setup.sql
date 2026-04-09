@@ -1,5 +1,5 @@
 -- ==========================================
--- SYNAPSE AI PRODUCTION DATABASE SCHEMA
+-- NeuroVision AI PRODUCTION DATABASE SCHEMA
 -- ==========================================
 
 -- 1. DOCTORS TABLE
@@ -114,7 +114,7 @@ BEGIN
 END $$;
 
 -- 6. SEED DATA
--- Injecting the required dummy doctors for Synapse verification
+-- Injecting the required dummy doctors for NeuroVision AI verification
 INSERT INTO public.doctors ("id", "name", "specialization", "city", "consultationFee", "experience", "availabilityColor", "nextAvailable")
 VALUES 
 ('d1', 'Dr. Ananya Sharma', 'Radiologist', 'Mumbai', 800, 10, 'green', '2025-04-08'),

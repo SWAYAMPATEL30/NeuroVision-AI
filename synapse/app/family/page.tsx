@@ -241,7 +241,7 @@ const FamilyDementiaDashboard = () => {
             const v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
-        return `https://synapse.com/therapist/${uuid}`;
+        return `https://neurovision.ai/therapist/${uuid}`;
     };
 
     // Handle therapist link creation

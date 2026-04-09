@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Doctor, TimeSlot } from '../types/doctor';
 import { Appointment, AppointmentMode, AttachedFile } from '../types/appointment';
 import { bookAppointment } from '../services/bookingApi';
@@ -20,10 +20,15 @@ export function useBooking(
   const [appointment, setAppointment] = useState<Appointment | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const attachedFiles: AttachedFile[] = [
-    { name: 'AI Diagnostic Report.pdf', type: 'report' },
-    ...(uploadedFileName ? [{ name: uploadedFileName, type: 'xray' as const }] : []),
-  ];
+  const attachedFiles: AttachedFile[] = useMemo(() => {
+    const files: AttachedFile[] = [
+      { name: 'AI Diagnostic Report.pdf', type: 'report' }
+    ];
+    if (uploadedFileName) {
+      files.push({ name: uploadedFileName, type: 'xray' });
+    }
+    return files;
+  }, [uploadedFileName]);
 
   const selectMode = useCallback((m: AppointmentMode) => {
     setMode(m);
@@ -69,7 +74,7 @@ export function useBooking(
       setError(e.message || 'Booking failed. Please try again.');
       setStep('consent');
     }
-  }, [selectedDoctor, consentGiven, mode, selectedSlot, aiReport, scanType, attachedFiles]);
+  }, [selectedDoctor, consentGiven, mode, selectedSlot, aiReport, scanType, attachedFiles, patientName]);
 
   const reset = useCallback(() => {
     setStep('select-mode');

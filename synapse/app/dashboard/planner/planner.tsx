@@ -17,9 +17,9 @@ export default function Planner() {
     const [phq12, setPhq12] = useState<Assessment | null>(null);
 
     useEffect(() => {
-        const gad7Data = localStorage.getItem('synapse_gad7');
-        const phq9Data = localStorage.getItem('synapse_phq9');
-        const phq12Data = localStorage.getItem('synapse_phq12');
+        const gad7Data = localStorage.getItem('neurovision_gad7');
+        const phq9Data = localStorage.getItem('neurovision_phq9');
+        const phq12Data = localStorage.getItem('neurovision_phq12');
         if (gad7Data) setGad7(JSON.parse(gad7Data));
         if (phq9Data) setPhq9(JSON.parse(phq9Data));
         if (phq12Data) setPhq12(JSON.parse(phq12Data));

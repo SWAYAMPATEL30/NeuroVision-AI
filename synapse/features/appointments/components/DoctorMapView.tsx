@@ -79,7 +79,7 @@ export function DoctorMapView({ doctors, onSelect, userLat, userLng }: Props) {
         });
         L.marker([userLat, userLng], { icon: userIcon })
           .addTo(map)
-          .bindTooltip('📍 You are here', { permanent: false, direction: 'top', className: 'synapse-tooltip' });
+          .bindTooltip('📍 You are here', { permanent: false, direction: 'top', className: 'neurovision-tooltip' });
       }
 
       mapRef.current = map;
@@ -213,7 +213,7 @@ export function DoctorMapView({ doctors, onSelect, userLat, userLng }: Props) {
 
             <button 
               id="book-btn-${doctor.id}"
-              onclick="window.__synapseBookDoctor && window.__synapseBookDoctor('${doctor.id}')"
+              onclick="window.__NeuroVisionBookDoctor && window.__NeuroVisionBookDoctor('${doctor.id}')"
               style="
                 width:100%;
                 padding:10px;
@@ -241,7 +241,7 @@ export function DoctorMapView({ doctors, onSelect, userLat, userLng }: Props) {
         const marker = L.marker([doctor.lat, doctor.lng], { icon })
           .addTo(mapRef.current)
           .bindPopup(popupContent, {
-            className: 'synapse-popup',
+            className: 'neurovision-popup',
             maxWidth: 260,
             closeButton: true,
           });
@@ -254,7 +254,7 @@ export function DoctorMapView({ doctors, onSelect, userLat, userLng }: Props) {
       });
 
       // Expose booking callback to popup buttons
-      (window as any).__synapseBookDoctor = (doctorId: string) => {
+      (window as any).__NeuroVisionBookDoctor = (doctorId: string) => {
         const doc = doctors.find(d => d.id === doctorId);
         if (doc) onSelect(doc);
       };
@@ -331,32 +331,32 @@ export function DoctorMapView({ doctors, onSelect, userLat, userLng }: Props) {
 
       {/* Popup CSS injected into head */}
       <style>{`
-        .synapse-popup .leaflet-popup-content-wrapper {
+        .neurovision-popup .leaflet-popup-content-wrapper {
           background: #0f172a !important;
           border: 1px solid rgba(255,255,255,0.1) !important;
           border-radius: 16px !important;
           box-shadow: 0 25px 50px rgba(0,0,0,0.8) !important;
           padding: 0 !important;
         }
-        .synapse-popup .leaflet-popup-content {
+        .neurovision-popup .leaflet-popup-content {
           margin: 0 !important;
           border-radius: 16px !important;
           overflow: hidden !important;
         }
-        .synapse-popup .leaflet-popup-tip {
+        .neurovision-popup .leaflet-popup-tip {
           background: #0f172a !important;
         }
-        .synapse-popup .leaflet-popup-close-button {
+        .neurovision-popup .leaflet-popup-close-button {
           color: #64748b !important;
           font-size: 18px !important;
           top: 8px !important;
           right: 8px !important;
           z-index: 1 !important;
         }
-        .synapse-popup .leaflet-popup-close-button:hover {
+        .neurovision-popup .leaflet-popup-close-button:hover {
           color: #f1f5f9 !important;
         }
-        .synapse-tooltip {
+        .neurovision-tooltip {
           background: #1e293b !important;
           color: #e2e8f0 !important;
           border: 1px solid rgba(255,255,255,0.1) !important;
@@ -365,7 +365,7 @@ export function DoctorMapView({ doctors, onSelect, userLat, userLng }: Props) {
           font-weight: 600 !important;
           box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
         }
-        .synapse-tooltip::before {
+        .neurovision-tooltip::before {
           border-top-color: rgba(255,255,255,0.1) !important;
         }
         .leaflet-control-attribution {

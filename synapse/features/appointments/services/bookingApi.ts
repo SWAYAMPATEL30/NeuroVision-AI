@@ -27,7 +27,7 @@ export async function bookAppointment(
     aiReport,
     scanType,
     clinicAddress: doctor.address,
-    videoCallUrl: mode === 'online' ? `https://meet.synapse.ai/room/${Date.now()}` : undefined,
+    videoCallUrl: mode === 'online' ? `https://meet.neurovision.ai/room/${Date.now()}` : undefined,
     createdAt: new Date().toISOString(),
     consentGiven,
     patientName,
@@ -44,9 +44,9 @@ export async function bookAppointment(
     console.error('Supabase booking failed:', error);
     // Fallback to localStorage for demo if DB is not ready
     if (typeof window !== 'undefined') {
-      const existing = JSON.parse(localStorage.getItem('synapse_appointments') || '[]');
+      const existing = JSON.parse(localStorage.getItem('neurovision_appointments') || '[]');
       existing.push(appointment);
-      localStorage.setItem('synapse_appointments', JSON.stringify(existing));
+      localStorage.setItem('neurovision_appointments', JSON.stringify(existing));
     }
     return appointment as Appointment;
   }
@@ -70,7 +70,7 @@ export async function getDoctorAppointments(doctorId: string): Promise<Appointme
 
 export function getStoredAppointments(): Appointment[] {
   if (typeof window === 'undefined') return [];
-  return JSON.parse(localStorage.getItem('synapse_appointments') || '[]');
+  return JSON.parse(localStorage.getItem('neurovision_appointments') || '[]');
 }
 
 export async function cancelAppointment(id: string): Promise<void> {
@@ -83,9 +83,9 @@ export async function cancelAppointment(id: string): Promise<void> {
     console.error('Error cancelling appointment:', error);
     // Fallback
     if (typeof window !== 'undefined') {
-      const existing: Appointment[] = JSON.parse(localStorage.getItem('synapse_appointments') || '[]');
+      const existing: Appointment[] = JSON.parse(localStorage.getItem('neurovision_appointments') || '[]');
       const updated = existing.map(a => a.id === id ? { ...a, status: 'cancelled' as const } : a);
-      localStorage.setItem('synapse_appointments', JSON.stringify(updated));
+      localStorage.setItem('neurovision_appointments', JSON.stringify(updated));
     }
   }
 }

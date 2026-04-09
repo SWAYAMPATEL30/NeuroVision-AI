@@ -158,7 +158,7 @@ const ResourceHub: React.FC<ResourceHubProps> = ({ userRole }) => {
     { id: 'all', label: 'All Categories' },
     { id: 'cognitive-tech', label: 'Cognitive' },
     { id: 'depression', label: 'Depression' },
-    { id: 'cognitive-tech', label: 'Cognitive Management' },
+    { id: 'cognitive-mgmt', label: 'Cognitive Management' },
     { id: 'sleep', label: 'Sleep & Wellness' },
     { id: 'relationships', label: 'Relationships' },
     { id: 'academic', label: 'Academic Cognitive' }

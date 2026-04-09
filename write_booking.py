@@ -1,9 +1,9 @@
 import pathlib
 
-SYNAPSE = pathlib.Path(r"c:\Users\ipate\OneDrive\Documents\try\synapse")
+NeuroVision AI = pathlib.Path(r"c:\Users\ipate\OneDrive\Documents\try\NeuroVision AI")
 
 # ---- SLOT BOOKING PAGE ----
-booking_dir = SYNAPSE / "app" / "dashboard" / "book-appointment"
+booking_dir = NeuroVision AI / "app" / "dashboard" / "book-appointment"
 booking_dir.mkdir(parents=True, exist_ok=True)
 
 booking_page = r'''
@@ -22,7 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { CalendarDays, Clock, CheckCircle2, User, Phone, FileText, ChevronRight, ChevronLeft, Stethoscope } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const BOOKING_KEY = "synapse-all-bookings";
+const BOOKING_KEY = "neurovision-all-bookings";
 
 const DOCTORS = [
   { id: "D1", name: "Dr. Priya Sharma", specialty: "Cardiologist", location: "Mumbai" },
@@ -69,7 +69,7 @@ function saveBooking(booking: Booking) {
     localStorage.setItem(BOOKING_KEY, JSON.stringify(all));
     // Notify doctor dashboard via BroadcastChannel (free, browser-native)
     if (typeof BroadcastChannel !== "undefined") {
-      const bc = new BroadcastChannel("synapse-bookings");
+      const bc = new BroadcastChannel("neurovision-bookings");
       bc.postMessage({ type: "new-booking", booking });
       bc.close();
     }

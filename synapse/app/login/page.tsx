@@ -16,6 +16,8 @@ export default function LoginPage() {
   const router = useRouter()
   const { login } = useAuth()
 
+  const [activeTab, setActiveTab] = useState<'patient' | 'doctor'>('patient')
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -30,7 +32,7 @@ export default function LoginPage() {
     // Simulate API call
     setTimeout(() => {
       const emailLower = email.toLowerCase();
-      let role: Role = 'PATIENT';
+      let role: Role = activeTab === 'doctor' ? 'DOCTOR' : 'PATIENT';
       let id = Date.now().toString();
       let name = email.split('@')[0];
 
@@ -80,7 +82,7 @@ export default function LoginPage() {
           <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto border border-white/20 shadow-2xl">
             <Activity className="w-10 h-10 text-blue-300" />
           </div>
-          <h1 className="text-4xl font-black tracking-tight">Welcome back to Synapse</h1>
+          <h1 className="text-4xl font-black tracking-tight">Welcome back to NeuroVision AI</h1>
           <p className="text-blue-100 text-lg leading-relaxed">AI-Powered medical diagnostics and seamless doctor consultations in one unified platform.</p>
         </motion.div>
       </div>
@@ -90,12 +92,29 @@ export default function LoginPage() {
         <div className="max-w-md w-full mx-auto space-y-8">
           <div className="text-center md:text-left space-y-2">
             <h2 className="text-3xl font-bold">Sign In</h2>
-            <p className="text-slate-500 dark:text-slate-400 text-sm">Enter your credentials to access your account</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Welcome back! Please select your role and enter credentials.</p>
+          </div>
+
+          <div className="flex p-1 bg-slate-200 dark:bg-slate-800/50 rounded-xl">
+            <button 
+              onClick={() => setActiveTab('patient')}
+              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${activeTab === 'patient' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900'}`}
+            >
+              Patient Login
+            </button>
+            <button 
+              onClick={() => setActiveTab('doctor')}
+              className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${activeTab === 'doctor' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900'}`}
+            >
+              Doctor Login
+            </button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Email Address</label>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                {activeTab === 'doctor' ? 'Official Email' : 'Email Address'}
+              </label>
               <div className="relative">
                 <Mail className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input 
@@ -103,7 +122,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={`w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-900 border rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition-all ${error ? 'border-red-500 dark:border-red-500/50' : 'border-slate-200 dark:border-white/10'}`}
-                  placeholder="you@example.com"
+                  placeholder={activeTab === 'doctor' ? "doctor@neurovision.ai" : "you@example.com"}
                 />
               </div>
             </div>
@@ -142,11 +161,6 @@ export default function LoginPage() {
               </motion.p>
             )}
 
-            <div className="flex items-center gap-2">
-              <input type="checkbox" id="remember" className="rounded bg-slate-900 border-slate-700 text-blue-500 focus:ring-blue-500" />
-              <label htmlFor="remember" className="text-sm font-medium text-slate-600 dark:text-slate-300">Remember me</label>
-            </div>
-
             <button 
               type="submit" 
               disabled={loading}
@@ -155,10 +169,11 @@ export default function LoginPage() {
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                <>Sign In <ArrowRight className="w-4 h-4" /></>
+                <>{activeTab === 'doctor' ? 'Log In as Doctor' : 'Log In as Patient'} <ArrowRight className="w-4 h-4" /></>
               )}
             </button>
           </form>
+
 
           <p className="text-center text-sm text-slate-500 dark:text-slate-400">
             Don't have an account? <a href="/register" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">Register</a>

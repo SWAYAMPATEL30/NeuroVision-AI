@@ -57,7 +57,7 @@ export default function PHQ12Onboarding() {
       const severity = severityFromScore(total);
       if (typeof window !== "undefined") {
         window.localStorage.setItem(
-          "synapse_phq12",
+          "neurovision_phq12",
           JSON.stringify({ score: total, severity, at: Date.now() })
         );
       }
