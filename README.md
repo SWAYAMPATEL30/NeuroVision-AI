@@ -676,16 +676,32 @@ Planned improvements:
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 Team
 
 <div align="center">
 
-Developed by **Swayam Patel** — B.Tech Computer Engineering Student
+This project was developed at **Shri Vile Parle Kelavani Mandal's**
+**Dwarkadas J. Sanghvi College of Engineering**
+*(Autonomous College Affiliated to University of Mumbai)*
+*NAAC Accredited with "A" Grade (CGPA: 3.18)*
 
-| Platform | Link |
-|----------|------|
-| GitHub | [@SWAYAMPATEL30](https://github.com/SWAYAMPATEL30) |
-| Project Repo | [NeuroVision-AI](https://github.com/SWAYAMPATEL30/NeuroVision-AI) |
+Department of Computer Engineering — 2024–2025
+
+<br>
+
+| Name | SAP ID | Role |
+|------|--------|------|
+| **Swayam Patel** | 60004240041 | AI/ML Pipeline, Backend & Full-Stack Lead |
+| **Akshit Shah** | 60004240020 | Frontend Development & UI/UX Design |
+| **Vraj Birje** | 60004240044 | Model Training & Data Engineering |
+| **Faisal Khan** | 60004240019 | API Integration & Database Architecture |
+| **Priyanka Limbad** | 60004220060 | Research, Documentation & Testing |
+
+<br>
+
+**Project Guide:** Prof. Khushali Deulkar &nbsp;|&nbsp; **H.O.D.:** Dr. Meera Narvekar &nbsp;|&nbsp; **Principal:** Dr. Hari Vasudevan
+
+<br>
 
 *"Technology should understand everyone — and make healthcare better for all of us."*
 
@@ -694,6 +710,7 @@ Developed by **Swayam Patel** — B.Tech Computer Engineering Student
 [![GitHub](https://img.shields.io/badge/GitHub-SWAYAMPATEL30-181717?style=for-the-badge&logo=github)](https://github.com/SWAYAMPATEL30)
 
 </div>
+
 
 ---
 
