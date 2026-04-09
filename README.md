@@ -120,6 +120,35 @@ NeuroVision AI solves this with three pillars:
 
 <br>
 
+```mermaid
+flowchart TD
+    U(["🧑 Patient / User"]) --> FE["🖥️ Next.js 15 Frontend\nPort 3000"]
+
+    FE --> |"REST API calls"| BE["⚡ FastAPI Backend\nPort 8000"]
+
+    BE --> AI["🤖 AI Model Engine\n(medical_classifier.py)"]
+    BE --> DB[("🗄️ Supabase\nPostgres Cloud DB")]
+    BE --> GROQ["☁️ Groq API\nllama-3.3-70b-versatile"]
+
+    AI --> M1["🫁 CustomNet121\nChest X-ray • 94.4% acc"]
+    AI --> M2["🧠 InceptionV3 Ensemble\nBrain MRI • 4-class"]
+    AI --> M3["🦴 MedSigLIP\nBone / General Scans"]
+    AI --> M4["📋 CheXpert DenseNet121\n14-label Chest Pathology"]
+
+    BE --> PDF["📄 ReportLab\nPDF Clinical Reports"]
+
+    FE --> AUTH["🔑 Supabase Auth\nJWT Sessions"]
+
+    style U fill:#6C3483,color:#fff
+    style FE fill:#0f172a,color:#34d399
+    style BE fill:#1e3a5f,color:#38bdf8
+    style AI fill:#1a2e1a,color:#86efac
+    style DB fill:#0c4a6e,color:#7dd3fc
+    style GROQ fill:#451a03,color:#fdba74
+    style PDF fill:#4a1942,color:#f9a8d4
+    style AUTH fill:#172554,color:#93c5fd
+```
+
 <div align="center">
 <img src="docs/architecture.png" width="90%" alt="NeuroVision AI System Architecture Overview"/>
 <br><sub><i>Fig. 3 — Full static stack overview: services, models, and database layers</i></sub>
