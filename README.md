@@ -114,47 +114,26 @@ NeuroVision AI solves this with three pillars:
 ## 🏗️ System Architecture
 
 <div align="center">
-<img src="docs/architecture.png" width="85%" alt="NeuroVision AI System Architecture"/>
-<br><sub><i>Fig. 2 — Full System Architecture: Next.js Frontend ↔ FastAPI Backend ↔ AI Models + Supabase</i></sub>
+<img src="docs/architecture_animated.svg" width="100%" alt="NeuroVision AI Animated System Architecture"/>
+<br><sub><i>Fig. 2 — Live animated data flow: Patient → Next.js → FastAPI → AI Models + Supabase</i></sub>
 </div>
 
 <br>
 
-The platform is a **hybrid architecture** — a decoupled frontend and backend designed for flexibility:
+<div align="center">
+<img src="docs/architecture.png" width="90%" alt="NeuroVision AI System Architecture Overview"/>
+<br><sub><i>Fig. 3 — Full static stack overview: services, models, and database layers</i></sub>
+</div>
 
-```mermaid
-flowchart TD
-    U(["🧑 Patient / User"]) --> FE["🖥️ Next.js 15 Frontend\nPort 3000"]
-
-    FE --> |"REST API calls"| BE["⚡ FastAPI Backend\nPort 8000"]
-
-    BE --> AI["🤖 AI Model Engine\n(medical_classifier.py)"]
-    BE --> DB[("🗄️ Supabase\nPostgres Cloud DB")]
-    BE --> GROQ["☁️ Groq API\nllama-3.3-70b-versatile"]
-
-    AI --> M1["🫁 CustomNet121\nChest X-ray • 94.4% acc"]
-    AI --> M2["🧠 InceptionV3 Ensemble\nBrain MRI • 4-class"]
-    AI --> M3["🦴 MedSigLIP\nBone / General Scans"]
-    AI --> M4["📋 CheXpert DenseNet121\n14-label Chest Pathology"]
-
-    BE --> PDF["📄 ReportLab\nPDF Clinical Reports"]
-
-    FE --> SUPABASE_AUTH["🔑 Supabase Auth\nJWT Sessions"]
-
-    style U fill:#6C3483,color:#fff
-    style FE fill:#0f172a,color:#34d399
-    style BE fill:#1e3a5f,color:#38bdf8
-    style AI fill:#1a2e1a,color:#86efac
-    style DB fill:#0c4a6e,color:#7dd3fc
-    style GROQ fill:#451a03,color:#fdba74
-```
+<br>
 
 **Data Flow:**
-1. User uploads a scan or enters a query on the **Next.js** frontend
-2. The request is forwarded to the **FastAPI** backend on port `8000`
-3. The backend routes to the correct **AI classifier** based on scan type
-4. Classification results are returned, and optionally a **Groq LLM** generates a full clinical report
-5. Results can be **auto-saved to Supabase** and a **PDF downloaded** instantly
+1. 👤 User uploads a scan or types a query in the **Next.js** frontend (port `3000`)
+2. ⚡ The request hits the **FastAPI** backend (port `8000`) via REST API
+3. 🤖 Backend routes to the correct **AI classifier** based on scan type (chest / bone / brain / text)
+4. 📄 Classification results trigger **Groq llama-3.3-70b** to generate a full structured clinical report
+5. 🗄️ Results are **auto-saved to Supabase** (diagnostic_reports table)
+6. ⬇️ User downloads the **PDF report** (ReportLab) — or books a follow-up appointment directly
 
 ---
 
@@ -400,60 +379,6 @@ A curated medical knowledge library with filterable content.
 
 ---
 
-## 📁 Repository Structure
-
-```
-NeuroVision-AI/
-│
-├── 📁 synapse/                        ← Next.js 15 Frontend
-│   ├── app/
-│   │   ├── page.tsx                   ← Landing page (HeroSection)
-│   │   ├── login/                     ← Auth — login & registration
-│   │   ├── register/
-│   │   ├── eval_game1/                ← Cognitive game 1 (memory)
-│   │   ├── eval_game2/                ← Cognitive game 2 (speed)
-│   │   ├── eval_game3/                ← Cognitive game 3 (recall)
-│   │   └── dashboard/
-│   │       ├── page.tsx               ← Main dashboard home
-│   │       ├── neurovision/           ← 🔬 AI Scan Analysis
-│   │       ├── chatbot/               ← 🤖 MedBot AI Chat
-│   │       ├── voice/                 ← 🎙️ Voice Therapist (Aria)
-│   │       ├── doctors/               ← 📅 Doctor Directory & Booking
-│   │       ├── book-appointment/      ← Booking flow
-│   │       ├── mental-health-planner/ ← 🧠 Mental Health + Assessments
-│   │       ├── planner/               ← Weekly health planning
-│   │       ├── resource/              ← 📚 Resource Hub
-│   │       ├── panchayat/             ← 🌐 VR Connect (FrameVR)
-│   │       ├── cognitive-health/      ← Cognitive health tracking
-│   │       └── meet/                  ← Video consultation room
-│   │
-│   ├── components/
-│   │   ├── Herosection/               ← Landing page hero
-│   │   ├── app-sidebar.tsx            ← Main application sidebar
-│   │   ├── nav-user.tsx               ← User avatar + settings
-│   │   └── sidechatbot.tsx            ← Floating AI chatbot widget
-│   │
-│   ├── features/
-│   │   └── appointments/
-│   │       ├── components/            ← BookingFlow, DoctorCard, DoctorMapView
-│   │       ├── hooks/                 ← useBooking, useLocations
-│   │       ├── services/              ← bookingApi.ts (Supabase calls)
-│   │       └── types/                 ← TypeScript appointment types
-│   │
-│   └── lib/
-│       ├── auth.ts                    ← Supabase auth hook (useAuth)
-│       └── supabase.ts                ← Supabase client singleton
-│
-├── 🐍 api.py                          ← FastAPI Backend (1,073 lines)
-├── 🧠 medical_classifier.py           ← AI Classifier Engine (2,165 lines)
-├── 🎯 finetune_chest_model.py         ← CustomNet121 fine-tuning script
-├── 📊 chest_finetune_history.csv      ← Training metrics log
-├── 🗄️ Production_Setup.sql            ← Supabase schema + seed data
-├── 📦 requirements.txt                ← Python backend dependencies
-├── 📁 docs/                           ← README images
-└── 📁 hf_models/                      ← Cached HuggingFace models (local)
-```
-
 ---
 
 ## ⚡ API Reference
@@ -607,52 +532,6 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 ```
 
 > ⚠️ **Never commit `.env` to version control.** The `.gitignore` already excludes it.
-
----
-
-## 🗄️ Database Schema
-
-The Supabase PostgreSQL schema has three core tables:
-
-```sql
--- Users (managed by Supabase Auth + profile extension)
-CREATE TABLE users (
-  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  email       TEXT UNIQUE NOT NULL,
-  name        TEXT,
-  role        TEXT DEFAULT 'patient',   -- 'patient' | 'doctor' | 'admin'
-  created_at  TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Appointments
-CREATE TABLE appointments (
-  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  patient_id      UUID REFERENCES users(id),
-  doctor_id       UUID REFERENCES users(id),
-  doctor_name     TEXT,
-  patient_name    TEXT,
-  date            DATE,
-  time            TEXT,
-  mode            TEXT,       -- 'online' | 'offline'
-  status          TEXT DEFAULT 'pending',
-  ai_report       TEXT,       -- attached AI report text
-  video_call_url  TEXT,
-  created_at      TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Diagnostic Reports
-CREATE TABLE diagnostic_reports (
-  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  patient_id    UUID REFERENCES users(id),
-  patient_name  TEXT,
-  scan_type     TEXT,         -- 'chest' | 'bone' | 'brain' | 'text'
-  disease       TEXT,
-  confidence    FLOAT,
-  report_text   TEXT,
-  model_used    TEXT,
-  created_at    TIMESTAMPTZ DEFAULT NOW()
-);
-```
 
 ---
 
