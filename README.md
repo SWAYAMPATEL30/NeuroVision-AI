@@ -1,6 +1,5 @@
-# Synapse Medical AI Platform 🏥
+NeuroVision AI : A multimodal medical diagnostics.
 
-Synapse is a next-generation medical diagnostic platform that combines specialized deep learning models with state-of-the-art LLMs (**Groq** & **Google Gemini**) to provide automated radiological screening and clinical report generation.
 
 ![Synapse UI](https://github.com/SWAYAMPATEL30/MedAI/raw/main/synapse/public/dashboard-preview.png)
 
