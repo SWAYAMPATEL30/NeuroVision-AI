@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroVision AI — Innovative Product Development</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ——————————— MEDICAL LIGHT THEME START ——————————— */
+:root {
+  --bg: #f8fafc; /* Very light slate background */
+  --surface: #ffffff; /* White cards */
+  --text-main: #0f172a; /* Slate 900 for high contrast text */
+  --text-muted: #475569; /* Slate 600 for secondary text */
+  --border: #e2e8f0; /* Soft borders */
+  
+  /* Clinical Colors */
+  --med-blue: #0284c7; /* Clinical primary blue */
+  --med-blue-light: #e0f2fe; 
+  --med-green: #059669; /* Healthcare green for success/health */
+  --med-green-light: #d1fae5;
+  --med-purple: #7c3aed; /* Neuroscience/brain indication */
+  --med-purple-light: #ede9fe;
+  --med-amber: #d97706; /* Warnings/attention */
+  --med-amber-light: #fef3c7;
+  --med-rose: #e11d48; /* Urgent/Heart */
+  --med-rose-light: #ffe4e6;
+  
+  --font: 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+.reveal-viewport { background: var(--bg); }
+.reveal { font-family: var(--font); color: var(--text-main); }
+.reveal h1,.reveal h2,.reveal h3,.reveal h4 { font-family: var(--font); color: var(--text-main); text-transform: none; letter-spacing: -0.02em; }
+.reveal section { padding: 0 !important; }
+.reveal a { color: var(--med-blue); text-decoration: none; }
+.reveal .progress { color: var(--med-blue); height: 5px; }
+.reveal .controls { color: var(--med-blue); }
+
+/* Overall UI Elements */
+.slide { width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; box-sizing: border-box; position: relative; overflow: hidden; }
+.content-wrapper { position: relative; z-index: 2; width: 100%; max-width: 1050px; }
+
+/* Clinical Cross Pattern Background Overlay */
+.slide::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 30px 30px; pointer-events: none; opacity: 0.5; z-index: 0; }
+.top-accent { position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--med-blue), var(--med-green)); z-index: 10; }
+
+/* Badges */
+.badge { display: inline-block; padding: 6px 16px; border-radius: 30px; font-size: 0.65em; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.badge-blue { background: var(--med-blue-light); color: var(--med-blue); border: 1px solid rgba(2,132,199,0.2); }
+.badge-green { background: var(--med-green-light); color: var(--med-green); border: 1px solid rgba(5,150,105,0.2); }
+.badge-purple { background: var(--med-purple-light); color: var(--med-purple); border: 1px solid rgba(124,58,237,0.2); }
+.badge-amber { background: var(--med-amber-light); color: var(--med-amber); border: 1px solid rgba(217,119,6,0.2); }
+.badge-rose { background: var(--med-rose-light); color: var(--med-rose); border: 1px solid rgba(225,29,72,0.2); }
+
+/* Cards & Elements */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08); border-color: rgba(2,132,199,0.3); }
+
+/* Typography Formatting */
+.section-label { font-size: 0.65em; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--med-blue); margin-bottom: 12px; display: inline-block; background: var(--med-blue-light); padding: 5px 14px; border-radius: 6px; }
+.slide-title { font-size: 2.6em; font-weight: 900; line-height: 1.1; margin: 0 0 32px; color: var(--text-main); }
+.slide-title span { color: var(--med-blue); }
+
+.code-pill { font-family: var(--mono); background: #f1f5f9; padding: 4px 8px; border-radius: 6px; border: 1px solid #e2e8f0; color: var(--med-rose); font-size: 0.85em; font-weight: 600; }
+
+.tech-list { font-size: 0.85em; line-height: 1.7; color: var(--text-muted); list-style: none; padding: 0; }
+.tech-list li { margin-bottom: 14px; padding-left: 24px; position: relative; }
+.tech-list li::before { content: '✓'; color: var(--med-blue); position: absolute; left: 0; font-weight: 800; }
+.tech-list strong { color: var(--text-main); font-weight: 700; }
+
+.highlight-text { background: var(--med-blue-light); border-left: 4px solid var(--med-blue); padding: 16px 24px; border-radius: 0 8px 8px 0; font-size: 0.85em; font-style: italic; margin-top: 24px; color: var(--text-main); font-weight: 500; }
+
+/* Arrows & Flow */
+.flow-container { display: flex; align-items: stretch; justify-content: space-between; gap: 15px; margin-top: 30px; }
+.flow-step { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px 10px; text-align: center; position: relative; z-index: 2; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+.flow-step .icon { font-size: 2em; margin-bottom: 8px; }
+.flow-step h4 { font-size: 0.75em; font-weight: 700; margin: 0; color: var(--text-main); }
+.flow-arrow { display: flex; align-items: center; justify-content: center; color: var(--med-blue); font-size: 1.3em; font-weight: 800; z-index: 1; }
+
+/* Slide Indicator */
+.slide-num { position: absolute; bottom: 20px; right: 30px; font-size: 0.6em; color: var(--text-muted); font-family: var(--mono); font-weight: 600; z-index: 10; letter-spacing: 0.1em; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ==============================================
+     1: TITLE SLIDE (Innovative Product)
+=============================================== -->
+<section>
+<div class="slide title-slide">
+  <div class="top-accent"></div>
+  <div class="content-wrapper" style="text-align:center">
+    
+    <div class="badge badge-blue fragment fade-down" style="margin-bottom:24px; font-size:0.75em; padding:8px 24px;">🚀 Innovative Product Development</div>
+    
+    <h1 class="fragment fade-up" style="font-size: 4.8em; font-weight: 900; line-height: 1; margin: 0 0 20px; color: var(--text-main)">
+      NeuroVision <span style="color: var(--med-blue)">AI</span>
+    </h1>
+    
+    <p class="fragment fade-up" style="font-size: 1.4em; color: var(--text-muted); margin: 0 0 40px; font-weight: 400; font-style: italic;">
+      "Where artificial intelligence meets the human side of healthcare."
+    </p>
+    
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:40px">
+      <span class="badge badge-rose fragment fade-up" data-fragment-index="1">Clinical Diagnostics</span>
+      <span class="badge badge-purple fragment fade-up" data-fragment-index="2">Mental Health Engine</span>
+      <span class="badge badge-green fragment fade-up" data-fragment-index="3">Autonomous Ecosystem</span>
+    </div>
+  </div>
+  <div class="slide-num">01 / 13</div>
+</div>
+</section>
+
+<!-- ==============================================
+     2: THE VISION (The "Why")
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="top-accent"></div>
+  <div class="content-wrapper">
+    <div class="section-label fragment fade-right">Product Vision</div>
+    <div class="slide-title fragment fade-right">Building a <span>Hospital in the Cloud</span></div>
+    
+    <div style="display:flex; gap:30px; align-items:stretch;">
+      <div class="card fragment fade-up" style="flex:1; border-top: 4px solid var(--med-rose)">
+        <h3 style="color:var(--med-rose); font-size:1.2em; margin-bottom:16px; font-weight:800">The Healthcare Gap</h3>
+        <ul class="tech-list">
+          <li class="fragment fade-up" style="--med-blue: var(--med-rose)"><strong>Siloed Systems:</strong> Booking, diagnostics, and therapy happen entirely disconnected from one another.</li>
+          <li class="fragment fade-up" style="--med-blue: var(--med-rose)"><strong>Delayed Answers:</strong> Getting a specialist radiologist review in rural/tier-2 areas takes days.</li>
+          <li class="fragment fade-up" style="--med-blue: var(--med-rose)"><strong>Mental Stigma:</strong> Mental health issues remain unaddressed due to high costs and social barriers.</li>
+        </ul>
+      </div>
+
+      <div class="card fragment fade-up" data-fragment-index="4" style="flex:1; border-top: 4px solid var(--med-green)">
+        <h3 style="color:var(--med-green); font-size:1.2em; margin-bottom:16px; font-weight:800">The NeuroVision Paradigm</h3>
+        <ul class="tech-list">
+          <li class="fragment fade-up" data-fragment-index="5" style="--med-blue: var(--med-green)"><strong>Unified Access:</strong> Democratizing access to clinical-grade intelligence globally.</li>
+          <li class="fragment fade-up" data-fragment-index="6" style="--med-blue: var(--med-green)"><strong>Instant Diagnostics:</strong> Autonomous AI scan analysis achieving speeds under 3 seconds.</li>
+          <li class="fragment fade-up" data-fragment-index="7" style="--med-blue: var(--med-green)"><strong>Empathetic Grounding:</strong> Voice Therapy & AI triaging to bridge the gap to traditional care.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">02 / 13</div>
+</div>
+</section>
+
+<!-- ==============================================
+     3: SYSTEM ARCHITECTURE
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="top-accent"></div>
+  <div class="content-wrapper">
+    <div class="section-label fragment fade-right">Infrastructure</div>
+    <div class="slide-title fragment fade-right">Modern <span>Hybrid Architecture</span></div>
+    
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top:20px">
+      <!-- Frontend -->
+      <div class="card fragment fade-up" style="text-align:center; border-bottom: 4px solid var(--text-main)">
+        <div style="font-size:2.5em; margin-bottom:10px">🖥️</div>
+        <h4 style="color:var(--text-main); font-size:1.1em; font-weight:800">The Face</h4>
+        <div class="badge badge-purple" style="margin-bottom:12px; font-size:0.5em; background:#f1f5f9; color:#0f172a; border-color:#cbd5e1">Next.js 15</div>
+        <p style="font-size:0.75em; color:var(--text-muted)">React App Router frontend. Built with Tailwind CSS & Radix UI for an ultra-responsive interface, ensuring a premium patient experience.</p>
+      </div>
+
+      <!-- Backend -->
+      <div class="card fragment fade-up" data-fragment-index="1" style="text-align:center; border-bottom: 4px solid var(--med-blue)">
+        <div style="font-size:2.5em; margin-bottom:10px">⚙️</div>
+        <h4 style="color:var(--med-blue); font-size:1.1em; font-weight:800">The Engine</h4>
+        <div class="badge badge-blue" style="margin-bottom:12px; font-size:0.5em">FastAPI (Python)</div>
+        <p style="font-size:0.75em; color:var(--text-muted)">Highly concurrent asynchronous routing. Chosen to calculate heavy PyTorch deep-learning inference quickly without blocking endpoints.</p>
+      </div>
+
+      <!-- Database -->
+      <div class="card fragment fade-up" data-fragment-index="2" style="text-align:center; border-bottom: 4px solid var(--med-green)">
+        <div style="font-size:2.5em; margin-bottom:10px">🗄️</div>
+        <h4 style="color:var(--med-green); font-size:1.1em; font-weight:800">The Memory</h4>
+        <div class="badge badge-green" style="margin-bottom:12px; font-size:0.5em">Supabase Hosted Postgres</div>
+        <p style="font-size:0.75em; color:var(--text-muted)">Scalable PostgreSQL handling secure JWT authentication, patient sessions, and safely persisting AI diagnostic findings over the cloud.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">03 / 13</div>
+</div>
+</section>
+
+<!-- ==============================================
+     4: REAL-TIME DATA FLOW
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="top-accent"></div>
+  <div class="content-wrapper">
+    <div class="section-label">Real-Time Processing Flow</div>
+    <div class="slide-title">End-to-End <span>Diagnostic Pipeline</span></div>
+    
+    <div class="flow-container">
+      <div class="flow-step fragment fade-right" style="border-top: 3px solid var(--med-purple)">
+        <div class="icon">📤</div>
+        <h4>1. Upload Scan</h4>
+        <p style="font-size:0.6em; color:var(--text-muted); margin-top:6px">Next.js UI File Drop</p>
+      </div>
+      <div class="flow-arrow fragment fade-right">→</div>
+      
+      <div class="flow-step fragment fade-right" style="border-top: 3px solid var(--text-main)">
+        <div class="icon">⚡</div>
+        <h4>2. REST API Request</h4>
+        <p style="font-size:0.6em; color:var(--text-muted); margin-top:6px">FastAPI Engine (8000)</p>
+      </div>
+      <div class="flow-arrow fragment fade-right">→</div>
+      
+      <div class="flow-step fragment fade-right" style="border-top: 3px solid var(--med-amber)">
+        <div class="icon">🔀</div>
+        <h4>3. Dynamic Routing</h4>
+        <p style="font-size:0.6em; color:var(--text-muted); margin-top:6px">Brain vs. Chest Logic</p>
+      </div>
+      <div class="flow-arrow fragment fade-right">→</div>
+      
+      <div class="flow-step fragment fade-right" style="border-top: 3px solid var(--med-blue)">
+        <div class="icon">🧠</div>
+        <h4>4. AI Tensor Inference</h4>
+        <p style="font-size:0.6em; color:var(--text-muted); margin-top:6px">PyTorch computing probs</p>
+      </div>
+      <div class="flow-arrow fragment fade-right">→</div>
+
+      <div class="flow-step fragment fade-right" style="border-top: 3px solid var(--med-rose)">
+        <div class="icon">📝</div>
+        <h4>5. Groq Output</h4>
+        <p style="font-size:0.6em; color:var(--text-muted); margin-top:6px">Math translates to NLP</p>
+      </div>
+      <div class="flow-arrow fragment fade-right">→</div>
+
+      <div class="flow-step fragment fade-right" style="border-top: 3px solid var(--med-green)">
+        <div class="icon">📄</div>
+        <h4>6. PDF Delivery</h4>
+        <p style="font-size:0.6em; color:var(--text-muted); margin-top:6px">ReportLab & Supabase DB</p>
+      </div>
+    </div>
+    
+  </div>
+  <div class="slide-num">04 / 13</div>
+</div>
+</section>
+
+<!-- ==============================================
+     5: 5-MODEL OVERVIEW
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="top-accent"></div>
+  <div class="content-wrapper" style="text-align:center">
+    <div class="section-label fragment fade-down">The Intelligence Suite</div>
+    <div class="slide-title fragment fade-up">The 5-Model <span>AI Ensemble</span></div>
+    
+    <p class="fragment fade-up" style="font-size:0.95em; color:var(--text-muted); max-width:800px; margin: 0 auto 40px;">
+      Generic wrapper models provide hallucinated healthcare. We custom-built a 
+      <strong>domain-specific routing ensemble</strong>. The backend parser detects the scan type and invokes the dedicated localized neural network.
+    </p>
+
+    <div style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center;">
+      <div class="card fragment zoom-in" style="width:30%; padding: 20px;">
+        <h4 style="color:var(--med-blue); font-weight:800">CustomNet121</h4>
+        <p style="font-size:0.7em; font-family:var(--mono); color:var(--text-muted)">Chest X-Ray Pathology</p>
+      </div>
+      <div class="card fragment zoom-in" style="width:30%; padding: 20px;" data-fragment-index="1">
+        <h4 style="color:var(--med-purple); font-weight:800">InceptionV3</h4>
+        <p style="font-size:0.7em; font-family:var(--mono); color:var(--text-muted)">Brain MRI Networks</p>
+      </div>
+      <div class="card fragment zoom-in" style="width:30%; padding: 20px;" data-fragment-index="2">
+        <h4 style="color:var(--med-amber); font-weight:800">MedSigLIP</h4>
+        <p style="font-size:0.7em; font-family:var(--mono); color:var(--text-muted)">Zero-Shot Orthopedics</p>
+      </div>
+      <div class="card fragment zoom-in" style="width:30%; padding: 20px;" data-fragment-index="3">
+        <h4 style="color:var(--med-green); font-weight:800">CheXpert NLP</h4>
+        <p style="font-size:0.7em; font-family:var(--mono); color:var(--text-muted)">14-Class Validation</p>
+      </div>
+      <div class="card fragment zoom-in" style="width:30%; padding: 20px;" data-fragment-index="4">
+        <h4 style="color:var(--med-rose); font-weight:800">Groq LLaMA</h4>
+        <p style="font-size:0.7em; font-family:var(--mono); color:var(--text-muted)">Clinical Report Generator</p>
+      </div>
+    </div>
+
+  </div>
+  <div class="slide-num">05 / 13</div>
+</div>
+</section>
+
+<!-- ==============================================
+     6: CUSTOMNET121
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="top-accent"></div>
+  <div class="content-wrapper">
+    <div class="section-label fragment fade-right">Subsystem 01</div>
+    <div class="slide-title fragment fade-right">CustomNet121 <span>(Chest X-Ray)</span></div>
+    
+    <div class="card fragment fade-up" style="border-left: 4px solid var(--med-blue)">
+      <ul class="tech-list" style="margin-bottom: 0;">
+        <li class="fragment fade-up"><strong>Architecture:</strong> A heavily fine-tuned, custom implementation of DenseNet121.</li>
+        <li class="fragment fade-up"><strong>Dataset Pipeline:</strong> Formally trained on the massive <strong>NIH ChestX-ray8 Dataset</strong> encompassing 112,120 labeled patient radiograph images.</li>
+        <li class="fragment fade-up"><strong>Code Structure:</strong> Engineered in <span class="code-pill">finetune_chest_model.py</span> mapping 14 pathologies via <code>ImageDataGenerator</code> with manual Cosine Decay learning schedules.</li>
+        <li class="fragment fade-up"><strong>Verification:</strong> Backed by raw logs inside <span class="code-pill">chest_finetune_history.csv</span> proving local programmatic execution lowering loss to <strong>0.153</strong> natively over 10 epochs.</li>
+      </ul>
+      
+      <div class="fragment fade-up" style="display:flex; justify-content:space-between; margin-top:24px; align-items:flex-end; padding-top:20px; border-top:1px solid var(--border)">
+        <div>
+          <span style="font-size:0.7em; color:var(--text-muted); text-transform:uppercase; font-weight:700; letter-spacing:0.1em; display:block">Epoch 10 Validation Accuracy</span>
+          <span style="font-size:2.8em; font-weight:900; color:var(--med-blue); line-height:1">94.4%</span>
+        </div>
+        <div class="badge badge-blue">11-Class Diagnosis System</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">06 / 13</div>
+</div>
+</section>
+
+<!-- ==============================================
+     7: INCEPTIONV3
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="top-accent"></div>
+  <div class="content-wrapper">
+    <div class="section-label fragment fade-right">Subsystem 02</div>
+    <div class="slide-title fragment fade-right">InceptionV3 <span>(Brain Tumor MRI)</span></div>
+    
+    <div class="card fragment fade-up" style="border-left: 4px solid var(--med-purple)">
+      <ul class="tech-list" style="margin-bottom:0">
+        <li class="fragment fade-up"><strong>Model Architecture:</strong> Base InceptionV3 architecture structured with custom fully-connected dense classification heads.</li>
+        <li class="fragment fade-up"><strong>Code Implementation:</strong> The entire data ingestion, image padding, and mapping sequence is demonstrated directly in <span class="code-pill">braintTumor.ipynb</span>.</li>
+        <li class="fragment fade-up"><strong>Training Origin:</strong> Ingests the <strong>Brain Tumor Classification MRI Dataset</strong> consisting of 7,023 distinct slices.</li>
+        <li class="fragment fade-up"><strong>Classification Vectors:</strong> Accurately categorizes into strict classes: <em>Glioma, Meningioma, Pituitary tumor,</em> or <em>Healthy no tumor</em>.</li>
+      </ul>
+      
+      <div class="fragment fade-up" style="display:flex; justify-content:space-between; margin-top:24px; align-items:flex-end; padding-top:20px; border-top:1px solid var(--border)">
+        <div>
+          <span style="font-size:0.7em; color:var(--text-muted); text-transform:uppercase; font-weight:700; letter-spacing:0.1em; display:block">Clinical Screening Capability Rating</span>
+          <span style="font-size:2.8em; font-weight:900; color:var(--med-purple); line-height:1">98.5%</span>
+        </div>
+        <div class="badge badge-purple">Neurology Specialization</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">07 / 13</div>
+</div>
+</section>
+
+<!-- ==============================================
+     8: MEDSIGLIP & CHEXPERT
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="top-accent"></div>
+  <div class="content-wrapper">
+    <div class="section-label fragment fade-right">Subsystems 03 & 04</div>
+    <div class="slide-title fragment fade-right">Zero-Shot Transformers <span>& Validation</span></div>
+    
+    <div style="display:flex; gap:20px;">
+      <div class="card fragment fade-up" style="flex:1; border-top: 4px solid var(--med-amber)">
+        <h3 style="color:var(--med-amber); font-size:1.15em; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:16px; font-weight:800">🦴 MedSigLIP (Orthopedics)</h3>
+        <p style="font-size:0.8em; color:var(--text-muted); line-height:1.6">
+          <strong>Architecture:</strong> Advanced HuggingFace Vision-Language Transformer model.<br><br>
+          <strong>The Approach:</strong> Employs <strong>Zero-Shot Classification</strong>. Instead of training fixed image classifiers for every bone, it dynamically pairs visual tensors with 20+ text pathology labels at runtime to detect fractures instantly.
+        </p>
+      </div>
+
+      <div class="card fragment fade-up" data-fragment-index="1" style="flex:1; border-top: 4px solid var(--med-green)">
+        <h3 style="color:var(--med-green); font-size:1.15em; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:16px; font-weight:800">📋 CheXpert Parallel Layer</h3>
+        <p style="font-size:0.8em; color:var(--text-muted); line-height:1.6">
+          <strong>Dataset:</strong> Originated from Stanford's CheXpert array (224,316 images).<br><br>
+          <strong>The Approach:</strong> Acts as an integrated parallel validation mechanism alongside CustomNet121. It strictly calculates logits across <strong>14 localized chest pathologies</strong> to output the precise visual bar probabilities on the frontend UI.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">08 / 13</div>
+</div>
+</section>
+
+<!-- ==============================================
+     9: NLP
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="top-accent"></div>
+  <div class="content-wrapper">
+    <div class="section-label fragment fade-right">Subsystem 05</div>
+    <div class="slide-title fragment fade-right">Groq NLP <span>& Dynamic PDF Engineering</span></div>
+    
+    <div class="card fragment fade-up" style="border-left: 4px solid var(--med-rose)">
+      <ul class="tech-list" style="margin-bottom:0">
+        <li class="fragment fade-up"><strong>The Accelerator:</strong> Bypassed standard, slow OpenAI APIs to leverage the revolutionary **Groq LPU (Language Processing Unit)** running LLaMA-3.3-70b.</li>
+        
+        <li class="fragment fade-up" style="margin-top:16px"><strong>Speed Implementation:</strong> It ingests PyTorch array confidences and constructs highly empathetic, structurally accurate 1,500-token medical reports in less than <strong>two seconds</strong>.</li>
+        
+        <li class="fragment fade-up" style="margin-top:16px"><strong>Custom Edge Fine-Tuning:</strong> Built a native localized pipeline (<span class="code-pill">fine_tune_llm.py</span>). We demonstrated the ability to wrap HuggingFace <code>AutoModelForCausalLM</code> directly with PyTorch Data Collators to fine-tune `google/medgemma-27b-it` over structured JSON datasets.</li>
+      </ul>
+      
+      <div class="highlight-text fragment fade-up">
+        Proves that NeuroVision's architecture isn't permanently tied to cloud APIs. It is engineered to host fully local, edge-enabled natural language generative inferences if internet connectivity drops in remote clinics.
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">09 / 13</div>
+</div>
+</section>
+
+<!-- ==============================================
+     10: PLATFORM MODULES 1
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="top-accent"></div>
+  <div class="content-wrapper">
+    <div class="section-label fragment fade-right">Scale & Reach (1/2)</div>
+    <div class="slide-title fragment fade-right">The Comprehensive <span>Product Ecosystem</span></div>
+    
+    <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:16px">
+      <div class="card fragment fade-up" style="padding:24px">
+        <h4 style="color:var(--med-blue); margin-bottom:8px; font-size:1em; font-weight:800">1. NeuroVision Core Diagnostics</h4>
+        <p style="font-size:0.75em; color:var(--text-muted); line-height:1.5; margin:0">The nexus of the application. Handles drag-and-drop file ingestion, triggers pipeline routing, visualizes exact inference probability bars, and compiles the downloadable ReportLab PDF.</p>
+      </div>
+
+      <div class="card fragment fade-up" data-fragment-index="1" style="padding:24px">
+        <h4 style="color:var(--text-main); margin-bottom:8px; font-size:1em; font-weight:800">2. Embedded MedBot Context Engine</h4>
+        <p style="font-size:0.75em; color:var(--text-muted); line-height:1.5; margin:0">A 24/7 autonomous symptom checker natively floating on the patient dashboard, designed as a highly empathetic first-layer triage protocol before formal diagnosis.</p>
+      </div>
+
+      <div class="card fragment fade-up" data-fragment-index="2" style="padding:24px">
+        <h4 style="color:var(--med-purple); margin-bottom:8px; font-size:1em; font-weight:800">3. Aria (Vocal Therapist Interface)</h4>
+        <p style="font-size:0.75em; color:var(--text-muted); line-height:1.5; margin:0">Taps the native browser <strong>Web Speech API</strong> and Groq audio translation to provide interactive spoken-word psychological grounding sessions without keyboard barriers.</p>
+      </div>
+
+      <div class="card fragment fade-up" data-fragment-index="3" style="padding:24px">
+        <h4 style="color:var(--med-green); margin-bottom:8px; font-size:1em; font-weight:800">4. Clinical Mental Health Planner</h4>
+        <p style="font-size:0.75em; color:var(--text-muted); line-height:1.5; margin:0">Digitizes globally recognized clinical scales: <strong>PHQ-9</strong> (depression screening) and <strong>GAD-7</strong> (anxiety indexing), producing actionable routine timelines based on score thresholds.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">10 / 13</div>
+</div>
+</section>
+
+<!-- ==============================================
+     11: PLATFORM MODULES 2
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="top-accent"></div>
+  <div class="content-wrapper">
+    <div class="section-label fragment fade-right">Scale & Reach (2/2)</div>
+    <div class="slide-title fragment fade-right">The Comprehensive <span>Product Ecosystem</span></div>
+    
+    <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:16px">
+      <div class="card fragment fade-up" style="padding:24px">
+        <h4 style="color:var(--med-amber); margin-bottom:8px; font-size:1em; font-weight:800">5. Neurological Baseline Game Tracking</h4>
+        <p style="font-size:0.75em; color:var(--text-muted); line-height:1.5; margin:0">Simulates and tracks memory decline by actively gamifying standard clinical MMSE (Mini-Mental State Exams) and Trailing pattern reaction speed (TMT testing) methodologies.</p>
+      </div>
+
+      <div class="card fragment fade-up" data-fragment-index="1" style="padding:24px">
+        <h4 style="color:var(--med-rose); margin-bottom:8px; font-size:1em; font-weight:800">6. Geolocation Doctor Booking Engine</h4>
+        <p style="font-size:0.75em; color:var(--text-muted); line-height:1.5; margin:0">Utilizes interactive <strong>React Leaflet Mapping</strong> to pinpoint specialists. Designed to allow patients to book and instantly attach their AI-generated diagnosis PDF in the payload.</p>
+      </div>
+
+      <div class="card fragment fade-up" data-fragment-index="2" style="padding:24px">
+        <h4 style="color:var(--med-blue); margin-bottom:8px; font-size:1em; font-weight:800">7. Family Data Linking</h4>
+        <p style="font-size:0.75em; color:var(--text-muted); line-height:1.5; margin:0">Borges the generational gap by allowing designated caregivers to securely sync and track an elderly family member's clinical diagnostic history and mental health score variances remotely.</p>
+      </div>
+
+      <div class="card fragment fade-up" data-fragment-index="3" style="padding:24px">
+        <h4 style="color:var(--text-main); margin-bottom:8px; font-size:1em; font-weight:800">8. VR Panchayat System & 9. Resource Hub</h4>
+        <p style="font-size:0.75em; color:var(--text-muted); line-height:1.5; margin:0">Pioneering edge-case connection using embedded <strong>FrameVR WebXR</strong> technology for remote group therapy spaces supporting camera and mic networking directly in-browser.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">11 / 13</div>
+</div>
+</section>
+
+<!-- ==============================================
+     12: THE PITCH / EXECUTION PROOF
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="top-accent"></div>
+  <div class="content-wrapper" style="text-align:center">
+    <div class="section-label fragment fade-down">The Engineering Proof</div>
+    <div class="slide-title fragment fade-up" style="margin-bottom:16px;">Demonstrating <span>Innovative Authenticity</span></div>
+    
+    <p class="fragment fade-up" style="font-size:0.9em; color:var(--text-muted); margin-bottom:32px;">This is not an API wrapper. The codebase fundamentally establishes custom programmatic training.</p>
+
+    <div class="card fragment fade-up" style="display:inline-block; max-width:850px; text-align:left; border-top: 4px solid var(--text-main)">
+      <ul class="tech-list" style="margin:0;">
+        <li class="fragment fade-up" style="padding-bottom:12px; border-bottom:1px dashed var(--border)">
+          <strong style="color:var(--med-blue)">Local Chest Mapping Execution</strong><br>
+          <span style="font-family:var(--mono); color:var(--med-rose); font-size:0.85em; font-weight:600">finetune_chest_model.py</span> directly constructs the CustomNet121 architecture logic, establishing manual callbacks, data generation, and early metric stopping protocols.
+        </li>
+        <li class="fragment fade-up" style="padding:12px 0; border-bottom:1px dashed var(--border); margin-top:12px;">
+          <strong style="color:var(--med-blue)">Verifiable Tensor Logs</strong><br>
+          <span style="font-family:var(--mono); color:var(--med-rose); font-size:0.85em; font-weight:600">chest_finetune_history.csv</span> serves as undeniable local proof of accuracy growth resulting in the mathematically recorded 0.153 loss index.
+        </li>
+        <li class="fragment fade-up" style="padding:12px 0; border-bottom:1px dashed var(--border); margin-top:12px;">
+          <strong style="color:var(--med-blue)">Neurological Array Generation</strong><br>
+          <span style="font-family:var(--mono); color:var(--med-rose); font-size:0.85em; font-weight:600">braintTumor.ipynb</span> proves raw processing capability parsing over 7,000 distinct images directly manipulating InceptionV3's final output matrices.
+        </li>
+        <li class="fragment fade-up" style="padding-top:12px; margin-top:12px;">
+          <strong style="color:var(--med-blue)">Natural Language Processing Tuning</strong><br>
+          <span style="font-family:var(--mono); color:var(--med-rose); font-size:0.85em; font-weight:600">fine_tune_llm.py</span> dictates the custom framework managing HuggingFace transformers, validating localization over cloud dependency.
+        </li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="slide-num">12 / 13</div>
+</div>
+</section>
+
+<!-- ==============================================
+     13: TEAM
+=============================================== -->
+<section>
+<div class="slide">
+  <div class="top-accent"></div>
+  <div class="content-wrapper" style="text-align:center">
+    <div class="section-label fragment fade-down">The Engineers</div>
+    <div class="slide-title fragment fade-up" style="margin-bottom:12px">Product Development <span>Team</span></div>
+
+    <div class="fragment fade-up" style="margin-bottom: 20px;">
+      <h3 style="font-size: 0.9em; color: var(--text-main); font-weight: 800; margin: 0 0 4px;">Dwarkadas J. Sanghvi College of Engineering</h3>
+      <p style="font-size: 0.65em; color: var(--text-muted); margin: 0;">Department of Computer Engineering</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin: 30px 0;">
+      <div class="card fragment fade-up" style="padding: 16px 10px; text-align: center;">
+        <div style="font-size: 2.2em; margin-bottom: 8px;">👨‍💻</div>
+        <div style="font-size: 0.8em; font-weight: 800; color: var(--text-main);">Swayam Patel</div>
+        <div style="font-size: 0.6em; color: var(--med-blue); font-family: var(--mono); margin-top:4px; font-weight:600">60004240041</div>
+      </div>
+      <div class="card fragment fade-up" data-fragment-index="1" style="padding: 16px 10px; text-align: center;">
+        <div style="font-size: 2.2em; margin-bottom: 8px;">🎨</div>
+        <div style="font-size: 0.8em; font-weight: 800; color: var(--text-main);">Akshit Shah</div>
+        <div style="font-size: 0.6em; color: var(--med-blue); font-family: var(--mono); margin-top:4px; font-weight:600">60004240020</div>
+      </div>
+      <div class="card fragment fade-up" data-fragment-index="2" style="padding: 16px 10px; text-align: center;">
+        <div style="font-size: 2.2em; margin-bottom: 8px;">🧠</div>
+        <div style="font-size: 0.8em; font-weight: 800; color: var(--text-main);">Vraj Birje</div>
+        <div style="font-size: 0.6em; color: var(--med-blue); font-family: var(--mono); margin-top:4px; font-weight:600">60004240044</div>
+      </div>
+      <div class="card fragment fade-up" data-fragment-index="3" style="padding: 16px 10px; text-align: center;">
+        <div style="font-size: 2.2em; margin-bottom: 8px;">🔌</div>
+        <div style="font-size: 0.8em; font-weight: 800; color: var(--text-main);">Faisal Khan</div>
+        <div style="font-size: 0.6em; color: var(--med-blue); font-family: var(--mono); margin-top:4px; font-weight:600">60004240019</div>
+      </div>
+      <div class="card fragment fade-up" data-fragment-index="4" style="padding: 16px 10px; text-align: center;">
+        <div style="font-size: 2.2em; margin-bottom: 8px;">📝</div>
+        <div style="font-size: 0.8em; font-weight: 800; color: var(--text-main);">Priyanka Limbad</div>
+        <div style="font-size: 0.6em; color: var(--med-blue); font-family: var(--mono); margin-top:4px; font-weight:600">60004220060</div>
+      </div>
+    </div>
+
+    <div class="fragment fade-up" style="display: flex; gap: 20px; justify-content: center; margin-top: 10px;">
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 24px;">
+        <div style="font-size: 0.6em; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Project Guide</div>
+        <div style="font-size: 0.9em; color: var(--text-main); font-weight: 800; margin-top:4px">Prof. Khushali Deulkar</div>
+      </div>
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 24px;">
+        <div style="font-size: 0.6em; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Head of Department</div>
+        <div style="font-size: 0.9em; color: var(--text-main); font-weight: 800; margin-top:4px">Dr. Meera Narvekar</div>
+      </div>
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 24px;">
+        <div style="font-size: 0.6em; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Principal</div>
+        <div style="font-size: 0.9em; color: var(--text-main); font-weight: 800; margin-top:4px">Dr. Hari Vasudevan</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="slide-num">13 / 13</div>
+</div>
+</section>
+
+</div><!-- /slides -->
+</div><!-- /reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  transition: 'slide', /* Slide transition between overall slides */
+  transitionSpeed: 'default',
+  backgroundTransition: 'fade',
+  controls: true,
+  progress: true,
+  center: false,
+  width: '100%',
+  height: '100%',
+  margin: 0,
+  minScale: 0.5,
+  maxScale: 1.5,
+  /* Make fragments (animations) require clicks/arrows to proceed */
+  fragments: true,
+  keyboard: {
+    39: 'next',
+    37: 'prev',
+    40: 'next',
+    38: 'prev',
+  },
+  plugins: []
+});
+</script>
+</body>
+</html>
